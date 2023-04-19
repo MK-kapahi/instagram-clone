@@ -1,0 +1,10 @@
+<div id="viewport">
+    <div id="sidebar">
+      <header>
+        <h1 >Instagram</h1>
+      </header>
+      <div class="nav" *ngFor=" let link of navButton" >
+        <button (click)="link.action()">{{link.display}} </button>
+      </div>
+    </div>
+  </div>

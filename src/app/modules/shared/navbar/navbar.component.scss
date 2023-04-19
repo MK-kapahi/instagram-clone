@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
+
+body {
+  overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+}
+
+/* Toggle Styles */
+
+#viewport {
+  padding-left: 250px;
+//   border: 5px solid red;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+#content {
+  width: 100%;
+  position: relative;
+  margin-right: 0;
+}
+
+/* Sidebar Styles */
+
+#sidebar {
+  z-index: 1000;
+  position: fixed;
+  left: 250px;
+  width: 250px;
+  height: 100%;
+  margin-left: -250px;
+  overflow-y: auto;
+  background: #ffffff;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+#sidebar header {
+    margin-top: 30px;
+  background-color: #ffffff;
+  font-size: 70px;
+  line-height: 60px;
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+#sidebar header h1 {
+  color: #000000;
+  display: block;
+  text-decoration: none;
+}
+
+#sidebar header b:hover {
+  color: #fff;
+}
+
+#sidebar .nav{
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+}
+
+#sidebar .nav button{
+  background: none;
+  //border-bottom: 1px solid #455A64;
+  color: #000000;
+  font-size: 14px;
+  padding: 16px 24px;
+  border-radius: 30px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+#sidebar .nav button:hover{
+  background: none;
+  color: #ECEFF1;
+}
+
+#sidebar .nav button i{
+  margin-right: 16px;
+}
