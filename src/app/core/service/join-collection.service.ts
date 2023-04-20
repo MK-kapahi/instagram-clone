@@ -19,6 +19,8 @@ export class JoinCollectionService {
   nestedComments !: Observable<any[]>
   constructor(private afs: AngularFirestore) { }
 
+
+  // Joining each post with its respective user and getting the data of likes on each post
   AllPost() {
     this.postsCollection = this.afs.collection<PostModal>('posts');
     this.postDetailCollection = this.afs.collection<Post>('postDetail');
@@ -42,12 +44,15 @@ export class JoinCollectionService {
             userName: user ? user.displayName : '',
             Likes: Like ? Like.likedUserId : [],
             Names: Like ? Like.Likedusername : [],
+            uid : user ? user.uid :""
           };
-        });
+        }); 
       })
     );
   }
 
+
+  // getting post of particular user 
   UserPost() {
     let uid: any = localStorage.getItem('id')
     console.log(uid)
@@ -78,6 +83,7 @@ export class JoinCollectionService {
     );
   }
 
+  // Getting All comments 
   allComments() {
     this.postsCollection = this.afs.collection<PostModal>('posts');
     this.usersCollection = this.afs.collection<User>('users');
@@ -103,6 +109,8 @@ export class JoinCollectionService {
     );
   }
 
+
+  // getting nested comments corresponding to a particular comment  
   NestedComments(id: any) {
     this.postsCollection = this.afs.collection<PostModal>('posts');
     this.usersCollection = this.afs.collection<User>('users');

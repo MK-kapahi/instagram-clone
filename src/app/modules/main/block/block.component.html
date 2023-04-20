@@ -1,1 +1,55 @@
-<p>block works!</p>
+<section class="main">
+    <div class="wrapper"*ngFor=" let post of Posts">
+        <div class="left-col" *ngIf="post.uid === currentUserDetails.uid" >
+            <div class="post" *ngIf="post.Block">
+                <div class="info">
+                    <div class="user">
+                        <img [src]=post.photoUrl alt="" class="profile-pic">
+                        <p class="username">{{post.userName}}</p>
+                    </div>
+                    <button mat-button [matMenuTriggerFor]="menu" class="btn"><mat-icon>more_vert</mat-icon></button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="unReportPost(post.postId)">unblock</button>
+                    </mat-menu>
+            </div>
+            <img [src]=post.Url class="post-image" alt="">
+            <div class="post-content">
+                <div class="reaction-wrapper">
+                    <!-- <button (click)="LikePost(post.postId,showLike(post.postId))"><mat-icon>{{!showLike(post.postId)
+                            ?'thumb_up':'thumb_down'}}</mat-icon></button> -->
+                    <!-- <img src="img/like.PNG" class="icon" alt="">
+                        <img src="img/comment.PNG" class="icon" alt="">
+                        <img src="img/send.PNG" class="icon" alt="">
+                        <img src="img/save.PNG" class="save icon" alt=""> -->
+                </div>
+                <button mat-button [matMenuTriggerFor]="likes" class="btn">Liked by {{post.Likes.length}} </button>
+                <mat-menu #likes="matMenu" class="likes">
+                    <ul mat-menu-item *ngFor="let name of post.Names">
+                        <li>
+                            {{name}}
+                        </li>
+                    </ul>
+                </mat-menu>
+                <p class="description"><span>{{post.userName}} </span> {{post.Description}}</p>
+                <div class="post-time">{{post.createdAt.toDate() | date : 'medium'}}</div>
+            </div>
+            <div class="comment-wrapper">
+                <div class="comment-box" >
+                    <!-- <app-comment-box (add)="onSubmit($event ,post.postId)" ></app-comment-box> -->
+                </div>
+                <button class="comments" (click)="showComment =! showComment" *ngIf="post.Comments>0">show
+                    {{post.Comments}}
+                    comments</button>
+                <!-- <img src="img/smile.PNG" class="icon" alt="">
+                    <input type="text" class="comment-box" placeholder="Add a comment">
+                    <button class="comment-btn">post</button> -->
+                </div>
+                <div *ngIf="showComment">
+                    <div *ngFor="let c of Comments ">
+                        <app-comment *ngIf="(c.postId === post.postId && c.parentId ==='')" [comment]="c"></app-comment>
+                    </div>
+                </div>
+        </div>
+    </div>
+    </div>
+</section>

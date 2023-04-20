@@ -18,8 +18,8 @@ import { v4 as uuidv4 } from 'uuid';
 export class InstaUserService {
 
   auth = getAuth();
-  uid: string = '';
-  postId: string = '';
+  // uid: string = '';
+  // postId: string = '';
   userDetails = new Subject<DocumentData>
   GetPost = new Subject<DocumentData>
   PostOFAuser = new Subject<DocumentData>
@@ -34,7 +34,6 @@ export class InstaUserService {
       uid: user.uid,
       email: data.email,
       displayName: data.displayName,
-      emailVerified: user.emailVerified,
       photoURL: DEFAULT.PROFILE
     };
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
@@ -45,21 +44,6 @@ export class InstaUserService {
     })
 
 
-  }
-
-  AllPosts() {
-    // let items = this.afs.collection('postDetail', ref => {
-    //   return ref.orderBy('createdAt', 'desc')
-    // }).snapshotChanges().pipe(
-    //   map(actions => {
-    //     return actions.map(action => ({
-    //       key: action.payload.doc.id,
-    //       ...action.payload.doc.data()
-    //     }));
-    //   })
-    // );
-
-    // return items
   }
 
   getDetails() {

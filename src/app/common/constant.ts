@@ -15,6 +15,7 @@ export const Main_Paths =
     DEFAULT: '',
     AUTH: 'auth',
     MAIN: 'main',
+    MATCH :'full'
 }
 
 export const Paths = {

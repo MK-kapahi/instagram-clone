@@ -9,12 +9,16 @@ import { Main_Paths, Paths } from 'src/app/common/constant';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu'
+import { MatMenuModule } from '@angular/material/menu';
+import { CommentBoxComponent } from './comment-box/comment-box.component';
+import { CommentComponent } from './comment/comment.component'
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { FormsModule } from '@angular/forms';
 
 
 const route : Routes = [
   {
-    path: Main_Paths.DEFAULT ,redirectTo:Paths.MAIN.HOME,pathMatch:'full'
+    path: Main_Paths.DEFAULT ,redirectTo:Paths.MAIN.HOME, pathMatch:'full'
   },
   {
     path : Paths.MAIN.HOME , component: HomeComponent , children:[
@@ -43,7 +47,9 @@ const route : Routes = [
     ShowPostComponent,
     CreatePostComponent,
     HomeComponent,
-    BlockComponent
+    BlockComponent,
+    CommentBoxComponent,
+    CommentComponent
   ],
   imports: [
     CommonModule,
@@ -51,6 +57,8 @@ const route : Routes = [
     SharedModule,
     MatIconModule,
     MatMenuModule,
+    PickerModule,
+    FormsModule
   ]
 })
 export class MainModule { }

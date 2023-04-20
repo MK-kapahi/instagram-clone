@@ -1,0 +1,36 @@
+<div class="container">
+	<div class="be-comment-block">
+		<div class="be-comment">
+			<div class="be-comment-content">
+					<span class="be-comment-name">
+						<p>{{comment.Name}}</p>
+						</span>
+					<span class="be-comment-time">
+						{{comment.date.toDate() | date : 'shortTime'}}
+					</span>	
+				<p class="be-comment-text">
+					{{comment.text}}
+				</p>
+				<button (click)="replyClick(comment.commentId , comment.postId , comment.Name)" title="Reply" class="btn" > <mat-icon>reply</mat-icon></button>
+				<button class="btn" (click)="showReply(comment.commentId)"> showReplies </button>
+				<div *ngIf="isEditing">
+					<form (ngSubmit)="addReply()" class="d-flex">
+						<textarea [(ngModel)]="replyText" name="comment" placeholder="Write a reply..." class="textarea-comment" (focus)="onFocus()"></textarea>
+						<button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;" class="btn">😀</button>
+						<emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>
+						<button type="submit" *ngIf="replyText" class="btn btn-primary" >Add</button>
+					  </form>
+				</div>
+			</div>
+			<div class="replies" *ngIf="repliesShow" >
+				<div *ngIf=" NestedReply.length >0 then ifPart ; else elsePart"> </div>
+				<ng-template #ifPart >
+				<app-comment *ngFor="let c of NestedReply" [comment]="c"></app-comment>
+			</ng-template>
+			<ng-template #elsePart >
+				<p> No more replies</p>
+			</ng-template>
+			</div>
+		</div>
+	</div>
+</div>	
