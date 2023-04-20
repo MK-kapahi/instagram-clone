@@ -15,8 +15,10 @@
             <img [src]=post.Url class="post-image" alt="">
             <div class="post-content">
                 <div class="reaction-wrapper">
-                    <button (click)="LikePost(post.postId,showLike(post.postId))"><mat-icon>{{!showLike(post.postId)
+                    <button (click)="LikePost(post.postId, post?.Likes.includes(currentUserDetails?.uid), post)" ><mat-icon>{{!post?.Likes.includes(currentUserDetails?.uid)
                             ?'thumb_up':'thumb_down'}}</mat-icon></button>
+                            <!-- <button (click)="post?.Likes.include(currentUserDetails?.uid)?LikePost(post.postId,showLike()):null" ><mat-icon>{{!showLike()
+                                ?'thumb_up':'thumb_down'}}</mat-icon></button> -->
                     <!-- <img src="img/like.PNG" class="icon" alt="">
                         <img src="img/comment.PNG" class="icon" alt="">
                         <img src="img/send.PNG" class="icon" alt="">
@@ -37,14 +39,14 @@
                 <div class="comment-box" >
                     <app-comment-box (add)="onSubmit($event ,post.postId)" ></app-comment-box>
                 </div>
-                <button class="comments" (click)="showComment =! showComment" *ngIf="post.Comments>0">show
+                <button class="comments" (click)="post.showComment =! post.showComment" *ngIf="post.Comments>0">show
                     {{post.Comments}}
                     comments</button>
                 <!-- <img src="img/smile.PNG" class="icon" alt="">
                     <input type="text" class="comment-box" placeholder="Add a comment">
                     <button class="comment-btn">post</button> -->
                 </div>
-                <div *ngIf="showComment">
+                <div *ngIf=" post.showComment ">
                     <div *ngFor="let c of Comments ">
                         <app-comment *ngIf="(c.postId === post.postId && c.parentId ==='')" [comment]="c"></app-comment>
                     </div>

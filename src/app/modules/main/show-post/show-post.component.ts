@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { DEFAULT } from 'src/app/common/constant';
 import { CommentsReplyService } from 'src/app/core/service/comments-reply.service';
 import { InstaUserService } from 'src/app/core/service/insta-user.service';
@@ -11,13 +12,12 @@ import { JoinCollectionService } from 'src/app/core/service/join-collection.serv
 })
 export class ShowPostComponent {
   currentUserDetails: any = [];
-  showComment: boolean = false;
   LikedUserList: Array<string> = [];
   showUnlike!: boolean;
   constructor(
     private userService: InstaUserService,
     private joinService: JoinCollectionService,
-    private commentsService: CommentsReplyService,
+    private commentsService: CommentsReplyService
   ) {
     this.userService.getDetails().subscribe((response) => {
       this.currentUserDetails = response;
@@ -30,30 +30,14 @@ export class ShowPostComponent {
     this.joinService.AllPost();
     this.joinService.commentsWithPostsAndUsers.subscribe((response: any) => {
       this.Posts = response;
+      console.log(response)
     });
 
     this.joinService.allComments();
     this.joinService.Comments.subscribe((response: any) => {
       console.log(response)
+      this.Comments= response
     });
-  }
-
-  showLike(id: any) {
-    let data = []
-    for (let post of this.Posts) {
-      if (post.postId === id) {
-        data = post.Likes.find((user: any) => {
-          return user === this.currentUserDetails.uid
-        })
-      }
-    }
-    if (data) {
-      return true;
-    }
-    else {
-
-      return false;
-    }
   }
   onSubmit($event: any, id: any) {
     console.log($event);
@@ -66,26 +50,27 @@ export class ShowPostComponent {
 
     console.log('Done');
   }
-  LikePost(postId: any, like: boolean) {
-    console.log(like)
+  LikePost(postId: any, like: boolean, post: any) {
     if (!like) {
       this.userService.getLikesData(postId).subscribe((response: any) => {
         console.log(response);
         if (response) {
 
           this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.TRUE, this.currentUserDetails.displayName).then(() => {
-            window.location.reload();
+            post?.Likes.push(this.currentUserDetails?.uid)
+            post?.Names.push(this.currentUserDetails?.displayName);
           });
         } else {
           this.userService.updateCountOfPost(postId, this.currentUserDetails.uid, this.currentUserDetails.displayName).then(() => {
-            window.location.reload();
+            post?.Likes.push(this.currentUserDetails?.uid)
+            post?.Names.push(this.currentUserDetails?.displayName)
           });
         }
       });
     } else {
+      post?.Likes.splice(post.Likes?.indexOf(this.currentUserDetails?.uid), 1)
+      post?.Names.splice(post.Names?.indexOf(this.currentUserDetails?.displayName), 1)
       this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.FALSE, this.currentUserDetails.displayName).then(() => {
-
-        window.location.reload();
       });
     }
   }
@@ -95,17 +80,14 @@ export class ShowPostComponent {
     });
   }
 
-  showCommentofPost(Id: any) {
-    if (this.showComment) {
-      this.showComment = false;
+  showComment(post:any) {
+    if (post.showComment) {
+      post.showComment = false;
     }
 
     else {
-      this.showComment = true;
+      post.showComment = true;
     }
-
-    this.Comments = this.Comments.filter((commentArray: any) => { return (commentArray.postId === Id && commentArray.parentId === '') })
-    console.log(this.Comments)
   }
 
 }
