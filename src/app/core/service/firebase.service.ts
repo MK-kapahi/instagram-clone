@@ -5,11 +5,12 @@ import { InstaUserService } from './insta-user.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getAuth } from 'firebase/auth';
+import { Main_Paths, Paths } from 'src/app/common/constant';
 
 
 
 const actionCodeSettings = {
-  url: 'https://localhost:4200/main/login',
+  url: 'https://feedstoryapp-25fc5.web.app/auth/login',
   handleCodeInApp: true,
 };
 
@@ -35,7 +36,6 @@ export class FirebaseService {
   }
 
    SignIn(email: string, password: string) {
-    console.log("heyyyyyyyy")
     return this.auth
       .signInWithEmailAndPassword(email, password)
       .then(async (result:any) => {
@@ -44,7 +44,7 @@ export class FirebaseService {
         {
           localStorage.setItem('token',result.user._delegate.accessToken)
           localStorage.setItem('id',result.user.uid)
-          this.route.navigate(['main/home']);
+          this.route.navigate([`${Main_Paths.MAIN}/${Paths.MAIN.HOME}`]);
           this.auth.authState.subscribe();
           this.toaster.success('Logged In Successfull'," success",{
             titleClass: "center",
@@ -96,7 +96,7 @@ export class FirebaseService {
     return this.auth.currentUser 
     .then((u: any) => 
     u.sendEmailVerification(actionCodeSettings)).then(  () => {
-        this.route.navigate(['auth/verify-email-address']);
+        this.route.navigate([`${Main_Paths.AUTH}/${Paths.AUTH.VERIFY_EMAIL}`]);
       });
   }
 
@@ -133,7 +133,7 @@ export class FirebaseService {
       localStorage.removeItem('user');
       localStorage.removeItem('id');
       localStorage.removeItem('token');
-      this.route.navigate(['auth']);
+      this.route.navigate([Main_Paths.AUTH]);
     });
   }
 

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { REGEX } from 'src/app/common/constant';
+import { Main_Paths, REGEX } from 'src/app/common/constant';
 import { FirebaseService } from 'src/app/core/service/firebase.service';
 
 @Component({
@@ -24,15 +24,12 @@ export class SignupComponent {
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
-  
-  Replace(event :any) {
-    event.target.value = event.target.value.replace(/[^0-9]/g, '')
-  }
   RegisterUser() {
    if(this.signUpForm.valid)
    {
-    console.log(this.signUpForm.value);
-        this.fireService.SignUp(this.signUpForm.value['email'] , this.signUpForm.value['password'], this.signUpForm.value)}
+        this.fireService.SignUp(this.signUpForm.value['email'] , this.signUpForm.value['password'], this.signUpForm.value)
+         this.signUpForm.reset();
+      }
         
 
    else{
@@ -43,11 +40,7 @@ export class SignupComponent {
 
   login()
   {
-      this.route.navigate(['auth/login'])
+      this.route.navigate([Main_Paths.AUTH])
   }
 
-  inputValue(event :any)
-  {
-      console.log(event.target.value)
-  }
 }

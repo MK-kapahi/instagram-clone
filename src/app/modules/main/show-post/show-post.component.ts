@@ -30,12 +30,11 @@ export class ShowPostComponent {
     this.joinService.AllPost();
     this.joinService.commentsWithPostsAndUsers.subscribe((response: any) => {
       this.Posts = response;
-      console.log(this.Posts)
     });
 
     this.joinService.allComments();
     this.joinService.Comments.subscribe((response: any) => {
-      this.Comments = response;
+      console.log(response)
     });
   }
 

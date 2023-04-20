@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, FormStyle } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { MatIconModule } from '@angular/material/icon';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Paths } from 'src/app/common/constant';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -33,12 +33,13 @@ const route : Routes = [
     LoginComponent,
     SignupComponent,
     VerifyEmailComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
   ],
   imports: [
     CommonModule ,
     MatIconModule,
     ReactiveFormsModule,
+    FormsModule,
     RouterModule.forChild(route),
   ]
 })

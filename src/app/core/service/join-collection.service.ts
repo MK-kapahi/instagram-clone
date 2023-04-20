@@ -23,7 +23,7 @@ export class JoinCollectionService {
   // Joining each post with its respective user and getting the data of likes on each post
   AllPost() {
     this.postsCollection = this.afs.collection<PostModal>('posts');
-    this.postDetailCollection = this.afs.collection<Post>('postDetail');
+    this.postDetailCollection = this.afs.collection<Post>('postDetail', ref => ref.orderBy('createdAt', 'desc'));
     this.usersCollection = this.afs.collection<User>('users');
     this.LikedCollection = this.afs.collection<LikesModal>('Likes');
 
@@ -60,7 +60,7 @@ export class JoinCollectionService {
     this.postsCollection.valueChanges().subscribe((res) => {
       console.log(res)
     })
-    this.postDetailCollection = this.afs.collection<Post>('postDetail');
+    this.postDetailCollection = this.afs.collection<Post>('postDetail', ref => ref.orderBy('createdAt', 'desc'));
     this.usersCollection = this.afs.collection<User>(`users`);
 
     this.currentUserPost = combineLatest([

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, map, of } from 'rxjs';
 import { DEFAULT } from 'src/app/common/constant';
 import { InstaUserService } from 'src/app/core/service/insta-user.service';
@@ -17,7 +18,7 @@ export class CreatePostComponent {
   Type : number = DEFAULT.IMAGE ;
   isEmojiPickerVisible: boolean = false;
   uploadPercent!: Observable<number>;
-  constructor(public userService : InstaUserService ){
+  constructor(public userService : InstaUserService , private toaster :ToastrService){
 
   }
   ngOnInit(): void {
@@ -48,13 +49,20 @@ export class CreatePostComponent {
         })
         this.uploadPercent = this.userService.uploadProgressObservable().pipe(map((progress: number) => progress))
       }
-      else{
-        console.log(this.FileUpload)
+      else if(this.FileUpload.type==='image/jpeg'){
         this.userService.uploadImage(this.FileUpload).subscribe((res:any)=>{})
         this.userService.Url.subscribe((res)=>{
           this.URL = res;
         })
         this.uploadPercent = this.userService.uploadProgressObservable().pipe(map((progress: number) => progress))
+      }
+
+      else 
+      {
+        this.toaster.warning("Invalid Post are not allowed", "Warning", {
+          titleClass: "center",
+            messageClass: "center",
+        });
       }
     }   
 

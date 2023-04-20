@@ -37,7 +37,6 @@ export class CommentComponent {
       for (let reply of response.replies) {
         this.join.NestedComments(reply.commentId)
         this.join.nestedComments.subscribe((response :any)=>{
-         console.log("join nested response", response)
           this.NestedReply.push(...response);
         })
       }
