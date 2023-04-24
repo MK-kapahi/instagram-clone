@@ -1,3 +1,5 @@
+
+<!-- {{Comments |json}} -->
 <section class="main">
     <div class="wrapper">
         <div class="left-col" *ngFor=" let post of Posts">
@@ -17,12 +19,6 @@
                 <div class="reaction-wrapper">
                     <button (click)="LikePost(post.postId, post?.Likes.includes(currentUserDetails?.uid), post)" ><mat-icon>{{!post?.Likes.includes(currentUserDetails?.uid)
                             ?'thumb_up':'thumb_down'}}</mat-icon></button>
-                            <!-- <button (click)="post?.Likes.include(currentUserDetails?.uid)?LikePost(post.postId,showLike()):null" ><mat-icon>{{!showLike()
-                                ?'thumb_up':'thumb_down'}}</mat-icon></button> -->
-                    <!-- <img src="img/like.PNG" class="icon" alt="">
-                        <img src="img/comment.PNG" class="icon" alt="">
-                        <img src="img/send.PNG" class="icon" alt="">
-                        <img src="img/save.PNG" class="save icon" alt=""> -->
                 </div>
                 <button mat-button [matMenuTriggerFor]="likes" class="btn">Liked by {{post.Likes.length}} </button>
                 <mat-menu #likes="matMenu" class="likes">
@@ -37,14 +33,11 @@
             </div>
             <div class="comment-wrapper">
                 <div class="comment-box" >
-                    <app-comment-box (add)="onSubmit($event ,post.postId)" ></app-comment-box>
+                    <app-comment-box (add)="onSubmit($event ,post.postId ,post)"  ></app-comment-box>
                 </div>
-                <button class="comments" (click)="post.showComment =! post.showComment" *ngIf="post.Comments>0">show
+                <button class="comments" (click)="post.showComment =! post.showComment" #commentShow *ngIf="post.Comments>0">show
                     {{post.Comments}}
                     comments</button>
-                <!-- <img src="img/smile.PNG" class="icon" alt="">
-                    <input type="text" class="comment-box" placeholder="Add a comment">
-                    <button class="comment-btn">post</button> -->
                 </div>
                 <div *ngIf=" post.showComment ">
                     <div *ngFor="let c of Comments ">

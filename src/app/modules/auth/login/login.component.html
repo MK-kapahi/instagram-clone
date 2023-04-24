@@ -34,7 +34,7 @@
                 letter, and 1 special character
               </p>
             </div>
-            <button type="submit" class="btn submits log-in">Log In</button>
+            <button type="submit" class="btn submits log-in" [disabled]="!isSingleClick">Log In</button>
             <button class="frgt-pass" (click)="moveToForgotPassword()">
               Forgot ?
             </button>

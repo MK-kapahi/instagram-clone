@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommentsReplyService } from 'src/app/core/service/comments-reply.service';
+import { InstaUserService } from 'src/app/core/service/insta-user.service';
 import { JoinCollectionService } from 'src/app/core/service/join-collection.service';
 
 @Component({
@@ -11,32 +12,36 @@ export class CommentComponent {
   replyText: any;
   @Input() comment: any;
    Postid: any;
-  Name !: string;
   isEditing = false;
   repliesShow: boolean = false;
-  NestedReply: any = []
+  NestedReply: any = [];
+  currentUserDetail :any =[];
+  Comments : any =[]
   isEmojiPickerVisible : boolean = false;
-  constructor( private commentService: CommentsReplyService , private join : JoinCollectionService ) {
+  constructor( private commentService: CommentsReplyService , private joinService : JoinCollectionService , private userService : InstaUserService) {
+    this.userService.getDetails().subscribe((response) => {
+      this.currentUserDetail = response
+    });
   }
 
   id!: string;
-  replyClick(commentId: any , postId :string , name : string) {
+  replyClick(commentId: any , postId :string) {
     this.isEditing = !this.isEditing;
     this.id = commentId;
     this.Postid = postId;
-    this.Name = name ;
   }
 
   addReply() {
-    this.commentService.addReplyToComment(this.id, this.replyText, this.Name , this.Postid );
-    this.replyText=''
+    let text= this.replyText.trim();
+    this.commentService.addReplyToComment(this.id,text, this.currentUserDetail.displayName , this.Postid );
+    this.replyText='';
   }
   showReply(id: any) {
     this.repliesShow = true;
     this.commentService.getNestedReply(id).subscribe((response: any) => {
       for (let reply of response.replies) {
-        this.join.NestedComments(reply.commentId)
-        this.join.nestedComments.subscribe((response :any)=>{
+        this.joinService.NestedComments(reply.commentId)
+        this.joinService.nestedComments.subscribe((response :any)=>{
           this.NestedReply.push(...response);
         })
       }
@@ -44,6 +49,7 @@ export class CommentComponent {
 
   }
 
+  // Adding emoji to reply 
   addEmoji(event: any) {
   
     const text = `${this.replyText}${event.emoji.native}`;

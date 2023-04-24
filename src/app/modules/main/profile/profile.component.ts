@@ -18,6 +18,8 @@ export class ProfileComponent implements OnInit {
   CurrentUserPost: any = [];
   isEmojiPickerVisible: boolean = false;
   constructor(private userService: InstaUserService, private join: JoinCollectionService , private route : Router) {
+
+    // Current User Details 
     this.userService.getDetails().subscribe((response) => {
       this.uid = response.uid
       this.User.push(response);
@@ -25,10 +27,12 @@ export class ProfileComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    // Getting the post of a particular User 
     this.join.UserPost()
     this.join.currentUserPost.subscribe((response) => {
-      console.log(response);
+      console.log("Current User POst",response);
       this.CurrentUserPost = response;
+      this.CurrentUserPost = this.CurrentUserPost.reverse()
     })
   }
 

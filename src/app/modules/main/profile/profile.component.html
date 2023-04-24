@@ -1,43 +1,45 @@
 <div class="container">
-    <div *ngFor="let detail of User ">
-    <section class="top-bar" >
-      <div class="top-bar__title">        
+  <div *ngFor="let detail of User ">
+    <section class="top-bar">
+      <div class="top-bar__title">
         <h1 class="top-bar__title__text">{{detail.displayName}}</h1>
-        <img class='top-bar__title__verified-icon' src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2053557/kisspng-social-media-instagram-verified-badge-symbol-compu-5b1eedb5aba638.1612204615287535897031.jpg" alt="verified-icon"></div>
+        <img class='top-bar__title__verified-icon'
+          src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2053557/kisspng-social-media-instagram-verified-badge-symbol-compu-5b1eedb5aba638.1612204615287535897031.jpg"
+          alt="verified-icon">
+      </div>
       <button class="top-bar__menu-btn"><i class="material-icons">more_horiz</i></button>
     </section>
     <section class="stats">
-    
-        <img [src]=detail.photoURL alt="" srcset="" class="stats__img-holder">   
-        <button class="btn" (click)="openPopup()">
-            <mat-icon>add_a_photo</mat-icon>
-          </button>  
+
+      <img [src]=detail.photoURL alt="" srcset="" class="stats__img-holder">
+      <button class="btn" (click)="openPopup()">
+        <mat-icon>add_a_photo</mat-icon>
+      </button>
       <div class="stats__data">
-      </div>      
+      </div>
     </section>
     <section class="description">
-      <!-- <h2 class="decription__title"></h2> -->
       <p>
-       {{detail.Bio}}
+        {{detail.Bio}}
       </p>
     </section>
-</div>
-    <section class="tabs">
-    </section>
-    <section class="grid">
-        <div *ngFor="let post of CurrentUserPost">
-        <div  class="grid__photo" >
-        <img [src]="post.Url" class="photo" alt="" *ngIf="post.Type === 1"/>
-          <video controls autoplay *ngIf="post.Type === 2" class="vedio" muted>
-            <source [src]="post.Url" type="video/mp4" />
-          </video>
-        </div>
-    </div>
-    </section>
   </div>
-  
- <!-- Modal for Profile  -->
- <div class="modal fade" id="staticBackdrop" [ngStyle]="{'display':displayStyle}" data-backdrop="static"
+  <section class="tabs">
+  </section>
+  <section class="grid d-flex flex-wrap justify-content-around">
+    <div *ngFor="let post of CurrentUserPost">
+      <div class="grid__photo ">
+        <img [src]="post.Url" class="photo" alt="" *ngIf="post.Type === 1" />
+        <video controls autoplay *ngIf="post.Type === 2" class="vedio" muted>
+          <source [src]="post.Url" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Modal for Profile  -->
+<div class="modal fade" id="staticBackdrop" [ngStyle]="{'display':displayStyle}" data-backdrop="static"
   data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">

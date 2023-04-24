@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Component, OnInit } from '@angular/core';
 import { DEFAULT } from 'src/app/common/constant';
 import { CommentsReplyService } from 'src/app/core/service/comments-reply.service';
 import { InstaUserService } from 'src/app/core/service/insta-user.service';
@@ -10,7 +9,8 @@ import { JoinCollectionService } from 'src/app/core/service/join-collection.serv
   templateUrl: './show-post.component.html',
   styleUrls: ['./show-post.component.scss']
 })
-export class ShowPostComponent {
+export class ShowPostComponent implements OnInit {
+  isSingleClick = true;
   currentUserDetails: any = [];
   LikedUserList: Array<string> = [];
   showUnlike!: boolean;
@@ -30,16 +30,20 @@ export class ShowPostComponent {
     this.joinService.AllPost();
     this.joinService.commentsWithPostsAndUsers.subscribe((response: any) => {
       this.Posts = response;
-      console.log(response)
-    });
 
+    });
+    this.initcommentSection()
+
+  }
+  initcommentSection() {
     this.joinService.allComments();
     this.joinService.Comments.subscribe((response: any) => {
-      console.log(response)
-      this.Comments= response
+      this.Comments = response;
     });
   }
-  onSubmit($event: any, id: any) {
+
+
+  onSubmit($event: any, id: any, post: any) {
     console.log($event);
     this.messageTobeCommented = $event;
     this.commentsService.addComment(
@@ -48,46 +52,49 @@ export class ShowPostComponent {
       this.currentUserDetails.displayName
     );
 
-    console.log('Done');
+    this.commentsService.getComments().subscribe((res: any) => {
+      console.log("comments", res)
+      this.Comments = res;
+      post.showComment = !post.showComment;
+    });
   }
   LikePost(postId: any, like: boolean, post: any) {
-    if (!like) {
-      this.userService.getLikesData(postId).subscribe((response: any) => {
-        console.log(response);
-        if (response) {
 
-          this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.TRUE, this.currentUserDetails.displayName).then(() => {
-            post?.Likes.push(this.currentUserDetails?.uid)
-            post?.Names.push(this.currentUserDetails?.displayName);
-          });
-        } else {
-          this.userService.updateCountOfPost(postId, this.currentUserDetails.uid, this.currentUserDetails.displayName).then(() => {
-            post?.Likes.push(this.currentUserDetails?.uid)
-            post?.Names.push(this.currentUserDetails?.displayName)
-          });
-        }
-      });
-    } else {
-      post?.Likes.splice(post.Likes?.indexOf(this.currentUserDetails?.uid), 1)
-      post?.Names.splice(post.Names?.indexOf(this.currentUserDetails?.displayName), 1)
-      this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.FALSE, this.currentUserDetails.displayName).then(() => {
-      });
+    if (this.isSingleClick) {
+      if (!like) {
+        this.userService.getLikesData(postId).subscribe((response: any) => {
+          console.log(response);
+          if (response) {
+
+            this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.TRUE, this.currentUserDetails.displayName).then(() => {
+              post?.Likes.push(this.currentUserDetails?.uid)
+              post?.Names.push(this.currentUserDetails?.displayName);
+            });
+          } else {
+            this.userService.updateCountOfPost(postId, this.currentUserDetails.uid, this.currentUserDetails.displayName).then(() => {
+              post?.Likes.push(this.currentUserDetails?.uid)
+              post?.Names.push(this.currentUserDetails?.displayName)
+            });
+          }
+        });
+      } else {
+        post?.Likes.splice(post.Likes?.indexOf(this.currentUserDetails?.uid), 1)
+        post?.Names.splice(post.Names?.indexOf(this.currentUserDetails?.displayName), 1)
+        this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.FALSE, this.currentUserDetails.displayName).then(() => {
+        });
+      }
+      this.isSingleClick = false;
     }
+
+    setTimeout(() => {
+      this.isSingleClick = true
+    }, 2000)
+
   }
   ReportPost(id: string) {
     this.userService.blockPost(id, DEFAULT.TRUE).then(() => {
       console.log('done');
     });
-  }
-
-  showComment(post:any) {
-    if (post.showComment) {
-      post.showComment = false;
-    }
-
-    else {
-      post.showComment = true;
-    }
   }
 
 }

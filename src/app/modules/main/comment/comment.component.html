@@ -11,10 +11,10 @@
 				<p class="be-comment-text">
 					{{comment.text}}
 				</p>
-				<button (click)="replyClick(comment.commentId , comment.postId , comment.Name)" title="Reply" class="btn" > <mat-icon>reply</mat-icon></button>
+				<button (click)="replyClick(comment.commentId , comment.postId)" title="Reply" class="btn" > <mat-icon>reply</mat-icon></button>
 				<button class="btn" (click)="showReply(comment.commentId)"> showReplies </button>
 				<div *ngIf="isEditing">
-					<form (ngSubmit)="addReply()" class="d-flex">
+					<form (ngSubmit)="addReply()" class="d-flex ">
 						<textarea [(ngModel)]="replyText" name="comment" placeholder="Write a reply..." class="textarea-comment" (focus)="onFocus()"></textarea>
 						<button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;" class="btn">😀</button>
 						<emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>

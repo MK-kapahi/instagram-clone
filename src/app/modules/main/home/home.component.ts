@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Subject } from 'rxjs';
+import { InstaUserService } from 'src/app/core/service/insta-user.service';
 
 @Component({
   selector: 'app-home',
@@ -9,9 +11,14 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class HomeComponent {
 
   loading :boolean = true ;
-  constructor(private spinnerService: NgxSpinnerService) {
+  public currentUserDetail = new Subject;
+  constructor(private spinnerService: NgxSpinnerService , private userService : InstaUserService) {
   }
   ngOnInit(): void {
+
+    // this.userService.getDetails().subscribe((response) => {
+    //   this.currentUserDetail.next(response);
+    // });
     // Start spinner 
     this.spinnerService.show();
 

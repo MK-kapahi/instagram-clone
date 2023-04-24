@@ -39,7 +39,7 @@ export class CreatePostComponent {
     {
 
       this.FileUpload = event.target.files[0];
-
+      console.log(this.FileUpload)
       if(this.FileUpload.type==='video/mp4')
       {
         this.userService.uploadVideo(this.FileUpload).subscribe();
@@ -49,7 +49,7 @@ export class CreatePostComponent {
         })
         this.uploadPercent = this.userService.uploadProgressObservable().pipe(map((progress: number) => progress))
       }
-      else if(this.FileUpload.type==='image/jpeg'){
+      else if(this.FileUpload.type=== 'image/jpeg' || this.FileUpload.type === 'image/png'){
         this.userService.uploadImage(this.FileUpload).subscribe((res:any)=>{})
         this.userService.Url.subscribe((res)=>{
           this.URL = res;

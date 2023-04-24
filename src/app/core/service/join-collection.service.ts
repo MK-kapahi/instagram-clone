@@ -44,9 +44,9 @@ export class JoinCollectionService {
             userName: user ? user.displayName : '',
             Likes: Like ? Like.likedUserId : [],
             Names: Like ? Like.Likedusername : [],
-            uid : user ? user.uid :""
+            uid: user ? user.uid : ""
           };
-        }); 
+        });
       })
     );
   }
@@ -57,9 +57,6 @@ export class JoinCollectionService {
     let uid: any = localStorage.getItem('id')
     console.log(uid)
     this.postsCollection = this.afs.collection<PostModal>('posts', ref => ref.where('uid', '==', uid));
-    this.postsCollection.valueChanges().subscribe((res) => {
-      console.log(res)
-    })
     this.postDetailCollection = this.afs.collection<Post>('postDetail', ref => ref.orderBy('createdAt', 'desc'));
     this.usersCollection = this.afs.collection<User>(`users`);
 
@@ -124,12 +121,12 @@ export class JoinCollectionService {
       }, (take(1)))
     )
 
-    this.nestedComments = combineLatest([this.usersCollection.valueChanges().pipe(take(1)), this.postsCollection.valueChanges().pipe(take(1)), comment$]).pipe(
+    this.nestedComments = combineLatest(
+      [this.usersCollection.valueChanges().pipe(take(1)), this.postsCollection.valueChanges().pipe(take(1)), comment$])
+      .pipe(
       map(([users, post, nested,]) => {
         return nested.map((nestedCommment: any) => {
-          console.log(nestedCommment.postId)
           const posts = post.find(p => p.postId === nestedCommment.postId);
-          console.log(posts)
           const user = users.find(u => u.uid === posts?.uid);
           return {
             ...nestedCommment,
