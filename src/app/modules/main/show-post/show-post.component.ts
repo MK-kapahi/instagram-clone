@@ -32,7 +32,6 @@ export class ShowPostComponent implements OnInit {
     this.joinService.AllPost();
     this.joinService.commentsWithPostsAndUsers.subscribe((response: any) => {
       this.Posts = response;
-      console.log(this.Posts)
     });
     this.initcommentSection()
 
@@ -57,7 +56,6 @@ export class ShowPostComponent implements OnInit {
     this.commentsService.getComments().subscribe((res: any) => {
       console.log("comments", res)
       this.Comments = res;
-      post.showComment = !post.showComment;
     });
   }
   LikePost(postId: any, like: boolean, post: any,) {
@@ -102,6 +100,6 @@ export class ShowPostComponent implements OnInit {
     this.selectedEmoji = event.emoji.native;
     //console.log(event.emoji.native
 
-    
+
     }
 }

@@ -43,5 +43,5 @@ export interface LikesModal {
 
 export interface LikedEmoji {
    Emoji: Array<string>;
-   EmojiId : string
+   postId : string
 }
