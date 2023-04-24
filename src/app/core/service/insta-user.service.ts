@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument, DocumentData } from '@angular/fire/compat/firestore';
 import { arrayUnion, increment, arrayRemove } from 'firebase/firestore';
-import { LikesModal, Post, PostModal, User } from '../../common/modal';
+import { LikedEmoji, LikesModal, Post, PostModal, User } from '../../common/modal';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { getAuth } from 'firebase/auth';
-import { finalize, map, of, Subject, take } from 'rxjs';
+import { finalize, of, Subject, take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { DEFAULT, Main_Paths } from '../../common/constant';
@@ -154,23 +154,40 @@ export class InstaUserService {
   }
 
 
-  updateCountOfPost(postid: any, userID: any, name: string) {
+  updateCountOfPost(postid: any, userID: string, name: string) {
 
 
+    // const Id = uuidv4()
+    // let LikedEmojiData: LikedEmoji =
+    // {
+    //   EmojiId: Id,
+    //   postID: postid,
+    //   UserId: userID,
+    //   Emoji: [emoji]
+    // }
     let LikeData: LikesModal =
     {
       postId: postid,
       likedUserId: [userID],
-      Likedusername: [name]
+      Likedusername: [name],
+      // LikedEmoji: [Id]
     }
+
+    this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
+      console.log("done")
+    })
+
+    // this.afs.collection("LikedEmoji").doc(Id).set(LikedEmojiData).then(() => {
+    //   console.log("done")
+    // })
 
     console.log(LikeData)
     this.afs.collection("postDetail").doc(postid).update({
       "likes": increment(1),
-      "updateAt" : new Date(),
+      "updateAt": new Date(),
     })
-     this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
-       console.log("done")
+    this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
+      console.log("done")
     })
   }
 
@@ -180,6 +197,14 @@ export class InstaUserService {
 
   updateData(postid: any, userId: string, like: boolean, name: string) {
 
+    // const Id = uuidv4()
+    // let LikedEmojiData: LikedEmoji =
+    // {
+    //   EmojiId : Id,
+    //   postID: postid,
+    //   UserId: userId,
+    //   Emoji: [emoji]
+    // }
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `Likes/${postid}`
     );
@@ -189,9 +214,13 @@ export class InstaUserService {
         "likes": increment(1)
       })
 
+      // this.afs.collection("LikedEmoji").doc(Id).set(LikedEmojiData).then(() => {
+      //   console.log("done")
+      // })
       return userRef.update({
         likedUserId: arrayUnion(userId),
-        Likedusername: arrayUnion(name)
+        Likedusername: arrayUnion(name),
+        // LikedEmoji: arrayUnion(Id)
       })
 
     }
@@ -201,12 +230,15 @@ export class InstaUserService {
         "likes": increment(-1)
       })
 
+      // this.afs.collection("LikedEmoji").doc(emojid).delete();
       return userRef.update({
         likedUserId: arrayRemove(userId),
-        Likedusername: arrayRemove(name)
+        Likedusername: arrayRemove(name),
+        // LikedEmoji: arrayRemove(emojid)
       }).then(() => {
         console.log("removed Sucessfylly")
       })
+
     }
 
   }
@@ -243,4 +275,19 @@ export class InstaUserService {
       })
     })
   }
+
+  // addEmoji(postid , userId )
+  // {
+  //   const Id = uuidv4()
+  //   let LikedEmojiData: LikedEmoji =
+  //   {
+  //     EmojiId: Id,
+  //     postID: postid,
+  //     UserId: userID,
+  //     Emoji: [emoji]
+  //   }
+     // this.afs.collection("LikedEmoji").doc(Id).set(LikedEmojiData).then(() => {
+      //   console.log("done")
+      // })
+  // }
 }

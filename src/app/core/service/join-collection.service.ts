@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable, combineLatest, take, map } from 'rxjs';
-import { PostModal, Post, User, LikesModal } from 'src/app/common/modal';
+import { PostModal, Post, User, LikesModal, LikedEmoji } from 'src/app/common/modal';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,7 @@ export class JoinCollectionService {
   private usersCollection!: AngularFirestoreCollection<User>;
   private LikedCollection !: AngularFirestoreCollection<LikesModal>;
   private CommentsCollection !: AngularFirestoreCollection<Comment>;
+  private LikedEmojiCollection !: AngularFirestoreCollection<LikedEmoji>;
   commentsWithPostsAndUsers!: Observable<any[]>;
   currentUserPost !: Observable<any[]>;
   Comments !: Observable<any[]>;
@@ -26,24 +27,30 @@ export class JoinCollectionService {
     this.postDetailCollection = this.afs.collection<Post>('postDetail', ref => ref.orderBy('createdAt', 'desc'));
     this.usersCollection = this.afs.collection<User>('users');
     this.LikedCollection = this.afs.collection<LikesModal>('Likes');
+    this.LikedEmojiCollection = this.afs.collection<LikedEmoji>("LikedEmoji")
 
     this.commentsWithPostsAndUsers = combineLatest([
       this.postDetailCollection.valueChanges(),
       this.postsCollection.valueChanges(),
       this.usersCollection.valueChanges(),
       this.LikedCollection.valueChanges(),
+      this.LikedEmojiCollection.valueChanges(),
     ]).pipe(
-      map(([postDetail, posts, users, likes]) => {
+      map(([postDetail, posts, users, likes , emoji]) => {
         return postDetail.map(postDetail => {
           const post = posts.find(p => p.postId === postDetail.postId);
           const user = users.find(u => u.uid === post?.uid);
           const Like = likes.find(l => l.postId === post?.postId)
+          // const Emoji = emoji.find (e => e.postID = post?.postId)
           return {
             ...postDetail,
             photoUrl: user ? user.photoURL : '',
             userName: user ? user.displayName : '',
             Likes: Like ? Like.likedUserId : [],
             Names: Like ? Like.Likedusername : [],
+            // LikedEmoji : Like ? Like.LikedEmoji :[],
+            // Emoji : Emoji ? Emoji.Emoji :[],
+            // EmojiId : Emoji ? Emoji.EmojiId : '',
             uid: user ? user.uid : ""
           };
         });
