@@ -20,6 +20,14 @@ export class LoginComponent {
       email: ['', Validators.compose([Validators.required, Validators.pattern(REGEX.EMAIL)])],
       password: ['', Validators.compose([Validators.required, Validators.pattern(REGEX.PASSWORD)])]
     })
+
+    this.loginForm.controls["email"].valueChanges.subscribe(()=>{
+      this.isSingleClick =true;
+    })
+
+    this.loginForm.controls["password"].valueChanges.subscribe(()=>{
+      this.isSingleClick =true;
+    })
   }
 
   togglePasswordVisibility(): void {
@@ -40,9 +48,6 @@ export class LoginComponent {
       this.isSingleClick = false;
     }
 
-    setTimeout(() => {
-      this.isSingleClick = true
-    }, 2000)
 
   }
 
@@ -51,6 +56,6 @@ export class LoginComponent {
   }
 
   moveToForgotPassword() {
-    this.route.navigate([`${Main_Paths.AUTH}/${Paths.AUTH.VERIFY_EMAIL}`]);
+    this.route.navigate([`${Main_Paths.AUTH}/${Paths.AUTH.FORGOT_PASSWORD}`]);
   }
 }

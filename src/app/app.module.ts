@@ -20,7 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     ToastrModule.forRoot({
-      timeOut: 1000,
+      timeOut: 3000,
       positionClass: 'toast-top-center',
     }),
     MainModule,

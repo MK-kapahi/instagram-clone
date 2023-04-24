@@ -37,7 +37,15 @@ export class CommentComponent {
     this.replyText='';
   }
   showReply(id: any) {
-    this.repliesShow = true;
+    if(this.repliesShow)
+    {
+      this.repliesShow = false;
+    }
+
+    else
+    {
+
+      this.repliesShow = true;
     this.commentService.getNestedReply(id).subscribe((response: any) => {
       for (let reply of response.replies) {
         this.joinService.NestedComments(reply.commentId)
@@ -46,7 +54,7 @@ export class CommentComponent {
         })
       }
     })
-
+  }
   }
 
   // Adding emoji to reply 

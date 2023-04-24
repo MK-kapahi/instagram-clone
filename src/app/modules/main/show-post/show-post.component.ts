@@ -14,6 +14,7 @@ export class ShowPostComponent implements OnInit {
   currentUserDetails: any = [];
   LikedUserList: Array<string> = [];
   showUnlike!: boolean;
+  isEmojiPickerVisible : boolean = false;
   constructor(
     private userService: InstaUserService,
     private joinService: JoinCollectionService,
@@ -30,7 +31,6 @@ export class ShowPostComponent implements OnInit {
     this.joinService.AllPost();
     this.joinService.commentsWithPostsAndUsers.subscribe((response: any) => {
       this.Posts = response;
-
     });
     this.initcommentSection()
 
@@ -71,10 +71,9 @@ export class ShowPostComponent implements OnInit {
               post?.Names.push(this.currentUserDetails?.displayName);
             });
           } else {
-            this.userService.updateCountOfPost(postId, this.currentUserDetails.uid, this.currentUserDetails.displayName).then(() => {
-              post?.Likes.push(this.currentUserDetails?.uid)
-              post?.Names.push(this.currentUserDetails?.displayName)
-            });
+            post?.Likes.push(this.currentUserDetails?.uid)
+            post?.Names.push(this.currentUserDetails?.displayName)
+            this.userService.updateCountOfPost(postId, this.currentUserDetails.uid, this.currentUserDetails.displayName)
           }
         });
       } else {
@@ -97,4 +96,10 @@ export class ShowPostComponent implements OnInit {
     });
   }
 
+  addEmoji(event: any) {
+  
+    console.log(event.emoji.native)
+    // const text = `${this.replyText}${event.emoji.native}`;
+    // console.log(this.replyText);
+    }
 }

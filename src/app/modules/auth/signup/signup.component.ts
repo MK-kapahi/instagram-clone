@@ -20,6 +20,13 @@ export class SignupComponent {
       email: ['', Validators.compose([Validators.required, Validators.pattern(REGEX.EMAIL)])],
       password: ['', Validators.compose([Validators.required, Validators.pattern(REGEX.PASSWORD)])]
     })
+
+    this.signUpForm.controls["email"].valueChanges.subscribe(()=>{
+      this.isSingleClick =true;
+    })
+    this.signUpForm.controls["password"].valueChanges.subscribe(()=>{
+      this.isSingleClick= true
+    })
   }
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
@@ -41,9 +48,10 @@ export class SignupComponent {
       this.isSingleClick=false;
     }
 
-    setTimeout(()=>{
-      this.isSingleClick=true;
-    },1000)
+
+    // setTimeout(()=>{
+    //   this.isSingleClick=true;
+    // },2000)
   }
 
   login() {

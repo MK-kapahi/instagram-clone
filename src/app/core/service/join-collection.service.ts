@@ -29,9 +29,9 @@ export class JoinCollectionService {
 
     this.commentsWithPostsAndUsers = combineLatest([
       this.postDetailCollection.valueChanges(),
-      this.postsCollection.valueChanges().pipe(take(1)),
-      this.usersCollection.valueChanges().pipe(take(1)),
-      this.LikedCollection.valueChanges().pipe(take(1)),
+      this.postsCollection.valueChanges(),
+      this.usersCollection.valueChanges(),
+      this.LikedCollection.valueChanges(),
     ]).pipe(
       map(([postDetail, posts, users, likes]) => {
         return postDetail.map(postDetail => {
@@ -48,7 +48,7 @@ export class JoinCollectionService {
           };
         });
       })
-    );
+    ),take(1);
   }
 
 

@@ -111,6 +111,8 @@ export class FirebaseService {
                 titleClass: "center",
                 messageClass: "center"
               })
+          
+        this.route.navigate([Main_Paths.AUTH]);
       })
       .catch((error) => {
         this.toaster.error(error.message,'Error', {

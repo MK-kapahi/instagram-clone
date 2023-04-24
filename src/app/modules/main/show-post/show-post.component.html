@@ -1,5 +1,3 @@
-
-<!-- {{Comments |json}} -->
 <section class="main">
     <div class="wrapper">
         <div class="left-col" *ngFor=" let post of Posts">
@@ -13,38 +11,42 @@
                     <mat-menu #menu="matMenu">
                         <button mat-menu-item (click)="ReportPost(post.postId)">Block</button>
                     </mat-menu>
-            </div>
-            <img [src]=post.Url class="post-image" alt="">
-            <div class="post-content">
-                <div class="reaction-wrapper">
-                    <button (click)="LikePost(post.postId, post?.Likes.includes(currentUserDetails?.uid), post)" ><mat-icon>{{!post?.Likes.includes(currentUserDetails?.uid)
-                            ?'thumb_up':'thumb_down'}}</mat-icon></button>
                 </div>
-                <button mat-button [matMenuTriggerFor]="likes" class="btn">Liked by {{post.Likes.length}} </button>
-                <mat-menu #likes="matMenu" class="likes">
-                    <ul mat-menu-item *ngFor="let name of post.Names">
-                        <li>
-                            {{name}}
-                        </li>
-                    </ul>
-                </mat-menu>
-                <p class="description"><span>{{post.userName}} </span> {{post.Description}}</p>
-                <div class="post-time">{{post.createdAt.toDate() | date : 'medium'}}</div>
-            </div>
-            <div class="comment-wrapper">
-                <div class="comment-box" >
-                    <app-comment-box (add)="onSubmit($event ,post.postId ,post)"  ></app-comment-box>
+                <img [src]=post.Url class="post-image" alt="">
+                <div class="post-content">
+                    <div class="reaction-wrapper">
+                        <button
+                            (click)="LikePost(post.postId, post?.Likes.includes(currentUserDetails?.uid), post)" class="btn"><mat-icon>{{!post?.Likes.includes(currentUserDetails?.uid)
+                                ?'thumb_up':'thumb_down'}}</mat-icon></button>
+                                <button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;" class="btn">😀</button>
+                                <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>  
+                    </div>
+                    <button mat-button [matMenuTriggerFor]="likes" class="btn">Liked by {{post.Likes.length}} </button>
+                    <mat-menu #likes="matMenu" class="likes">
+                        <ul mat-menu-item *ngFor="let name of post.Names">
+                            <li>
+                                {{name}}
+                            </li>
+                        </ul>
+                    </mat-menu>
+                    <p class="description"><span>{{post.userName}} </span> {{post.Description}}</p>
+                    <div class="post-time">{{post.createdAt.toDate() | date : 'medium'}}</div>
                 </div>
-                <button class="comments" (click)="post.showComment =! post.showComment" #commentShow *ngIf="post.Comments>0">show
-                    {{post.Comments}}
-                    comments</button>
+                <div class="comment-wrapper">
+                    <div class="comment-box">
+                        <app-comment-box (add)="onSubmit($event ,post.postId ,post)"></app-comment-box>
+                    </div>
+                    <button class="comments" (click)="post.showComment =! post.showComment" #commentShow
+                        *ngIf="post.Comments>0">show
+                        {{post.Comments}}
+                        comments</button>
                 </div>
                 <div *ngIf=" post.showComment ">
                     <div *ngFor="let c of Comments ">
                         <app-comment *ngIf="(c.postId === post.postId && c.parentId ==='')" [comment]="c"></app-comment>
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
     </div>
 </section>

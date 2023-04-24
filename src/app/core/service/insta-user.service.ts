@@ -163,11 +163,14 @@ export class InstaUserService {
       likedUserId: [userID],
       Likedusername: [name]
     }
+
+    console.log(LikeData)
     this.afs.collection("postDetail").doc(postid).update({
       "likes": increment(1),
+      "updateAt" : new Date(),
     })
-    return this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
-      // console.log("done")
+     this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
+       console.log("done")
     })
   }
 
