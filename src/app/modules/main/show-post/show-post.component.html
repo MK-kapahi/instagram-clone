@@ -12,7 +12,10 @@
                         <button mat-menu-item (click)="ReportPost(post.postId)">Block</button>
                     </mat-menu>
                 </div>
-                <img [src]=post.Url class="post-image" alt="">
+                <img [src]=post.Url height="600px" *ngIf="post.Type===1" />
+      <video controls autoplay *ngIf="post.Type===2" style=" width: 600px; height: 600px;" muted>
+        <source [src]="post.Url" type="video/mp4">
+      </video>
                 <div class="post-content">
                     <div class="reaction-wrapper">
                         <button (click)="LikePost(post.postId, post?.Likes.includes(currentUserDetails?.uid), post)"
