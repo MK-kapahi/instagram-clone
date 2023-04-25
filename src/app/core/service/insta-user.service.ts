@@ -10,7 +10,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { DEFAULT, Main_Paths } from '../../common/constant';
 import { v4 as uuidv4 } from 'uuid';
-import * as bcrypt from "bcryptjs";
 
 
 @Injectable({
@@ -146,30 +145,14 @@ export class InstaUserService {
 
 
   updateCountOfPost(postid: any, userID: string, name: string, emoji: string) {
-
-    if (emoji) {
-
-
-      const Id = uuidv4()
-      let LikedEmojiData: LikedEmoji =
-      {
-        EmojiId: Id,
-        Emoji: emoji,
-        PostId: postid
-      }
       let LikeData: LikesModal =
       {
         postId: postid,
         likedUserId: [userID],
         Likedusername: [name],
-        LikedEmoji: [Id]
       }
 
       this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
-        console.log("done")
-      })
-
-      this.afs.collection("LikedEmoji").doc(Id).set(LikedEmojiData).then(() => {
         console.log("done")
       })
 
@@ -181,32 +164,7 @@ export class InstaUserService {
       this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
         console.log("done")
       })
-    }
-
-    else {
-      let LikeData: LikesModal =
-      {
-        postId: postid,
-        likedUserId: [userID],
-        Likedusername: [name],
-        LikedEmoji: []
-      }
-
-      this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
-        console.log("done")
-      })
-
-      // this.afs.collection("LikedEmoji").doc(Id).set(LikedEmojiData).then(() => {
-      //   console.log("done")
-      // })
-      this.afs.collection("postDetail").doc(postid).update({
-        "likes": increment(1),
-        "updateAt": new Date(),
-      })
-      this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
-        console.log("done")
-      })
-    }
+    
   }
 
   getLikesData(postid: string) {
@@ -231,14 +189,9 @@ export class InstaUserService {
       this.afs.collection("postDetail").doc(postid).update({
         "likes": increment(1)
       })
-
-      this.afs.collection("LikedEmoji").doc(Id).set(LikedEmojiData).then(() => {
-        console.log("done")
-      })
       return userRef.update({
         likedUserId: arrayUnion(userId),
         Likedusername: arrayUnion(name),
-        LikedEmoji: arrayUnion(Id)
       })
 
     }
@@ -248,11 +201,9 @@ export class InstaUserService {
         "likes": increment(-1)
       })
 
-      this.afs.collection("LikedEmoji").doc(emojiId).delete();
       return userRef.update({
         likedUserId: arrayRemove(userId),
         Likedusername: arrayRemove(name),
-        LikedEmoji: arrayRemove(emojiId)
       }).then(() => {
         console.log("removed Sucessfylly")
       })
@@ -260,13 +211,6 @@ export class InstaUserService {
     }
 
   }
-  // getPostDetails() {
-  //   return this.afs.collection('posts').valueChanges().pipe(take(1))
-  // }
-
-  // getDocumentFromCollection(documentId: string) {
-  //   return this.afs.collection('users').doc(documentId).get();
-  // }
 
   blockPost(id: string, report: boolean) {
     if (report) {

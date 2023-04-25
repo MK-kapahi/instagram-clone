@@ -1,4 +1,4 @@
-<div class="container overflow-auto" #commentbox id="commentbox" [scrollTop]="commentbox.scrollHeight-1">
+<div class="container overflow-auto">
 	<div class="be-comment-block">
 		<div class="be-comment">
 			<div class="be-comment-content">
@@ -13,7 +13,8 @@
 				</p>
 				<button (click)="replyClick(comment.commentId , comment.postId)" title="Reply" class="btn">
 					<mat-icon>reply</mat-icon></button>
-				<button class="btn" (click)="showReply(comment.commentId)"> showReplies </button>
+				<button class="btn" (click)="showReply(comment.commentId)"  > showReplies </button>
+				<!-- <button class="btn" (click)="Hide()" *ngIf="hideReply" > Hide </button> -->
 				<div *ngIf="isEditing">
 					<form (ngSubmit)="addReply()" class="d-flex ">
 						<textarea [(ngModel)]="replyText" name="comment" placeholder="Write a reply..."

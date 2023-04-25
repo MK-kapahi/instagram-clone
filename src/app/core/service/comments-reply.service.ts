@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat
 import { ToastrService } from 'ngx-toastr';
 import { v4 as uuidv4 } from 'uuid';
 import { arrayUnion, increment } from 'firebase/firestore';
-import { Subject, take } from 'rxjs';
+import { Observable, Subject, take } from 'rxjs';
 import { Comment } from '../../common/modal'
 
 @Injectable({
@@ -13,6 +13,7 @@ export class CommentsReplyService {
 
 
   commentSubject = new Subject<Comment>;
+  PrecviousReplyId = ''
   constructor(private afs: AngularFirestore, private toaster: ToastrService) { }
 
   addComment(message: string, id: any, name: string) {
@@ -81,12 +82,23 @@ export class CommentsReplyService {
 
 
   getNestedReply(postid: any) {
-    return this.afs.collection('comments').doc(postid).valueChanges().pipe(take(1));
+    if(!this.PrecviousReplyId) {
+      this.PrecviousReplyId=postid;
+      return this.afs.collection('comments').doc(postid).valueChanges().pipe(take(1));
+    }
+    else if(this.PrecviousReplyId && postid!=this.PrecviousReplyId)
+    {
+      this.PrecviousReplyId=postid;  
+      return this.afs.collection('comments').doc(postid).valueChanges().pipe(take(1));
+    }
+    return new Observable((Observer) => {
+    
+    })
   }
 
   getComments() {
 
-    return this.afs.collection("comments", ref => ref.orderBy("date", 'desc')).valueChanges().pipe()
+    return this.afs.collection("comments", ref => ref.orderBy("date", 'desc')).valueChanges().pipe(take(2))
 
   }
 }

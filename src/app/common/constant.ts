@@ -48,5 +48,6 @@ export const DEFAULT =
     TRUE : true,
     FALSE : false ,
     VEDIO : 2,
-    IMAGE : 1
+    IMAGE : 1,
+    HASH_VALUE : 10
 }

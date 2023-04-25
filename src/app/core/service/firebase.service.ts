@@ -5,7 +5,7 @@ import { InstaUserService } from './insta-user.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getAuth } from 'firebase/auth';
-import { Main_Paths, Paths } from 'src/app/common/constant';
+import { DEFAULT, Main_Paths, Paths } from 'src/app/common/constant';
 import * as bcrypt from "bcryptjs";
 import { take } from 'rxjs';
 
@@ -43,7 +43,7 @@ export class FirebaseService {
        if (bcrypt.compareSync(password , user.password)) {
         return this.auth
           .signInWithEmailAndPassword(email,user.password)
-          .then(async (result: any) => {
+          .then( (result: any) => {
             console.log(result.user)
             if (result.user.emailVerified) {
               localStorage.setItem('token', result.user._delegate.accessToken)
@@ -82,12 +82,11 @@ export class FirebaseService {
   }
 
   SignUp(email: string, data: any) {
-    const encryptHash = bcrypt.hashSync(data.password,10)
+    const encryptHash = bcrypt.hashSync(data.password,DEFAULT.HASH_VALUE)
     return this.auth
       .createUserWithEmailAndPassword(email, encryptHash)
       .then((userCredential) => {
         const user = userCredential.user
-        console.log("jdhswjdhswd", user)
         this.instaUser.SetUserData(user, data ,encryptHash);
         this.toaster.success('User Registered Successfully', 'Sucesss',
           {
@@ -95,7 +94,6 @@ export class FirebaseService {
             messageClass: "center"
           })
         this.SendVerificationMail();
-        console.log(userCredential);
       })
       .catch((error) => {
         console.log(error)
@@ -109,7 +107,6 @@ export class FirebaseService {
   SendVerificationMail() {
     return this.auth.currentUser
       .then((u: any) => {
-        console.log(u)
         u.sendEmailVerification(actionCodeSettings)
       }).then(() => {
         this.route.navigate([`${Main_Paths.AUTH}/${Paths.AUTH.VERIFY_EMAIL}`]);
@@ -136,10 +133,6 @@ export class FirebaseService {
           messageClass: "center",
         });
       });
-  }
-
-  isLoggedIn(): boolean {
-    return !localStorage.getItem('token')
   }
   SignOut() {
     return this.auth.signOut().then(() => {

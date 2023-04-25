@@ -22,10 +22,10 @@
                         <button (click)="LikePost(post.postId, post?.Likes.includes(currentUserDetails?.uid), post , post.EmojiId)"
                             class="btn"><mat-icon>{{!post?.Likes.includes(currentUserDetails?.uid)
                                 ?'thumb_up':'thumb_down'}}</mat-icon></button>
-                        <button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;" [disabled]="selectedEmoji"
+                        <!-- <button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;" [disabled]="selectedEmoji"
                             class="btn">😀</button>
                         <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)"
-                            title="Choose your emoji"></emoji-mart>
+                            title="Choose your emoji"></emoji-mart> -->
 
                     </div>
                     <!-- <div *ngFor="let emoji of post.Emoji">

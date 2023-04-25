@@ -32,7 +32,6 @@ export class ShowPostComponent implements OnInit {
     this.joinService.AllPost();
     this.joinService.commentsWithPostsAndUsers.subscribe((response: any) => {
        this.Posts = response;
-       console.log(this.Posts)
     });
     this.initcommentSection()
 

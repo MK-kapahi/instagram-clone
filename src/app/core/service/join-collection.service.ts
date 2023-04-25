@@ -48,9 +48,9 @@ export class JoinCollectionService {
             userName: user ? user.displayName : '',
             Likes: Like ? Like.likedUserId : [],
             Names: Like ? Like.Likedusername : [],
-            LikedEmoji : Like ? Like.LikedEmoji :[],
-            Emoji : Emoji ? Emoji.Emoji :[],
-            EmojiId : Emoji ? Emoji.EmojiId : '',
+            // LikedEmoji : Like ? Like.LikedEmoji :[],
+            // Emoji : Emoji ? Emoji.Emoji :[],
+            // EmojiId : Emoji ? Emoji.EmojiId : '',
             uid: user ? user.uid : ""
           };
         });
