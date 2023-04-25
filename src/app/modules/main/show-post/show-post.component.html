@@ -12,22 +12,23 @@
                         <button mat-menu-item (click)="ReportPost(post.postId)">Block</button>
                     </mat-menu>
                 </div>
-                <img [src]=post.Url height="600px" *ngIf="post.Type===1" />
-      <video controls autoplay *ngIf="post.Type===2" style=" width: 600px; height: 600px;" muted>
-        <source [src]="post.Url" type="video/mp4">
-      </video>
+
+                <img [src]=post.Url *ngIf="post.Type===1" class="upload-content"/>
+                <video controls autoplay *ngIf="post.Type===2" muted class="upload-vedio" >
+                    <source [src]="post.Url" type="video/mp4">
+                </video>
                 <div class="post-content">
                     <div class="reaction-wrapper">
-                        <button (click)="LikePost(post.postId, post?.Likes.includes(currentUserDetails?.uid), post)"
+                        <button (click)="LikePost(post.postId, post?.Likes.includes(currentUserDetails?.uid), post , post.EmojiId)"
                             class="btn"><mat-icon>{{!post?.Likes.includes(currentUserDetails?.uid)
                                 ?'thumb_up':'thumb_down'}}</mat-icon></button>
                         <button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;" [disabled]="selectedEmoji"
                             class="btn">😀</button>
-                        <!-- <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji(post.postId, post?.Likes.includes(currentUserDetails?.uid) ,$event )"
-                            title="Choose your emoji"></emoji-mart> -->
+                        <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)"
+                            title="Choose your emoji"></emoji-mart>
 
-                        </div>
-                        <!-- <div *ngFor="let emoji of post.Emoji">
+                    </div>
+                    <!-- <div *ngFor="let emoji of post.Emoji">
                             {{emoji}}
                         </div> -->
                     <button mat-button [matMenuTriggerFor]="likes" class="btn">Liked by {{post.Likes.length}} </button>

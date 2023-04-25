@@ -35,7 +35,7 @@ export class SignupComponent {
 
     if (this.isSingleClick) {
       if (this.signUpForm.valid) {
-        this.fireService.SignUp(this.signUpForm.value['email'], this.signUpForm.value['password'], this.signUpForm.value)
+        this.fireService.SignUp(this.signUpForm.value['email'], this.signUpForm.value)
         this.signUpForm.reset();
       }
 

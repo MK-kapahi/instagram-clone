@@ -3,18 +3,22 @@ body{
     background-color:#e9ebee;
 }
 
+.container
+{
+    margin: 0px;
+}
 .be-comment-block {
-    margin-bottom: 20px !important;
+    // margin-bottom: 20px !important;
     border: 1px solid #edeff2;
     border-radius: 2px;
-    padding: 50px 70px;
+    padding: 30px 30px;
     border:1px solid #ffffff;
 }
 
 .comments-title {
     font-size: 16px;    
     color: #262626;
-    margin-bottom: 10px;
+    // margin-bottom: 10px;
     font-family: 'Conv_helveticaneuecyr-bold';
 }
 
@@ -22,7 +26,7 @@ body{
     width: 20px;
     height: 20px;
     float: left;
-    margin-bottom: 15px;
+    // margin-bottom: px;
 }
 
 .be-ava-comment {
@@ -35,7 +39,7 @@ body{
 .be-comment-content span {
     display: inline-block;
     width: 30%;
-    margin-bottom: 15px;
+    // margin-bottom: 15px;
 }
 
 .be-comment-name {
@@ -50,7 +54,7 @@ body{
 .be-comment-content span {
     display: inline-block;
     width: 30%;
-    margin-bottom: 15px;
+    // margin-bottom: 15px;
 }
 
 .be-comment-time {

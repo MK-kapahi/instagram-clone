@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { DEFAULT, Main_Paths } from '../../common/constant';
 import { v4 as uuidv4 } from 'uuid';
+import * as bcrypt from "bcryptjs";
 
 
 @Injectable({
@@ -18,8 +19,6 @@ import { v4 as uuidv4 } from 'uuid';
 export class InstaUserService {
 
   auth = getAuth();
-  // uid: string = '';
-  // postId: string = '';
   userDetails = new Subject<DocumentData>
   GetPost = new Subject<DocumentData>
   PostOFAuser = new Subject<DocumentData>
@@ -28,13 +27,13 @@ export class InstaUserService {
   Url = new Subject<string>
   constructor(private route: Router, public afs: AngularFirestore, public Fireauth: AngularFireAuth, private store: AngularFireStorage, private toaster: ToastrService) {
   }
-  SetUserData(user: any, data: any) {
-
+  SetUserData(user: any, data: any, password: string) {
     const userData: User = {
       uid: user.uid,
       email: data.email,
       displayName: data.displayName,
-      photoURL: DEFAULT.PROFILE
+      photoURL: DEFAULT.PROFILE,
+      password: password,
     };
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${user.uid}`
@@ -143,68 +142,87 @@ export class InstaUserService {
       merge: true,
     })
   }
-  getPost() {
-    const id: any = localStorage.getItem("id")
 
-    this.afs.collection("posts").doc(id).ref.get().then((doc: any) => {
-      if (doc.exists) {
-        this.GetPost.next(doc.data())
+
+
+  updateCountOfPost(postid: any, userID: string, name: string, emoji: string) {
+
+    if (emoji) {
+
+
+      const Id = uuidv4()
+      let LikedEmojiData: LikedEmoji =
+      {
+        EmojiId: Id,
+        Emoji: emoji,
+        PostId: postid
       }
-    })
-  }
+      let LikeData: LikesModal =
+      {
+        postId: postid,
+        likedUserId: [userID],
+        Likedusername: [name],
+        LikedEmoji: [Id]
+      }
 
+      this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
+        console.log("done")
+      })
 
-  updateCountOfPost(postid: any, userID: string, name: string) {
+      this.afs.collection("LikedEmoji").doc(Id).set(LikedEmojiData).then(() => {
+        console.log("done")
+      })
 
-
-    // const Id = uuidv4()
-    // let LikedEmojiData: LikedEmoji =
-    // {
-    //   EmojiId: Id,
-    //   postID: postid,
-    //   UserId: userID,
-    //   Emoji: [emoji]
-    // }
-    let LikeData: LikesModal =
-    {
-      postId: postid,
-      likedUserId: [userID],
-      Likedusername: [name],
-      // LikedEmoji: [Id]
+      console.log(LikeData)
+      this.afs.collection("postDetail").doc(postid).update({
+        "likes": increment(1),
+        "updateAt": new Date(),
+      })
+      this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
+        console.log("done")
+      })
     }
 
-    this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
-      console.log("done")
-    })
+    else {
+      let LikeData: LikesModal =
+      {
+        postId: postid,
+        likedUserId: [userID],
+        Likedusername: [name],
+        LikedEmoji: []
+      }
 
-    // this.afs.collection("LikedEmoji").doc(Id).set(LikedEmojiData).then(() => {
-    //   console.log("done")
-    // })
+      this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
+        console.log("done")
+      })
 
-    console.log(LikeData)
-    this.afs.collection("postDetail").doc(postid).update({
-      "likes": increment(1),
-      "updateAt": new Date(),
-    })
-    this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
-      console.log("done")
-    })
+      // this.afs.collection("LikedEmoji").doc(Id).set(LikedEmojiData).then(() => {
+      //   console.log("done")
+      // })
+      this.afs.collection("postDetail").doc(postid).update({
+        "likes": increment(1),
+        "updateAt": new Date(),
+      })
+      this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
+        console.log("done")
+      })
+    }
   }
 
   getLikesData(postid: string) {
     return this.afs.doc<any>('Likes/' + postid).valueChanges().pipe(take(1));
   }
 
-  updateData(postid: any, userId: string, like: boolean, name: string) {
+  updateData(postid: any, userId: string, like: boolean, name: string, emoji: string, emojiId: string) {
 
-    // const Id = uuidv4()
-    // let LikedEmojiData: LikedEmoji =
-    // {
-    //   EmojiId : Id,
-    //   postID: postid,
-    //   UserId: userId,
-    //   Emoji: [emoji]
-    // }
+    const Id = uuidv4()
+    let LikedEmojiData: LikedEmoji =
+    {
+      EmojiId: Id,
+      Emoji: emoji,
+      PostId: postid
+    }
+
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `Likes/${postid}`
     );
@@ -214,13 +232,13 @@ export class InstaUserService {
         "likes": increment(1)
       })
 
-      // this.afs.collection("LikedEmoji").doc(Id).set(LikedEmojiData).then(() => {
-      //   console.log("done")
-      // })
+      this.afs.collection("LikedEmoji").doc(Id).set(LikedEmojiData).then(() => {
+        console.log("done")
+      })
       return userRef.update({
         likedUserId: arrayUnion(userId),
         Likedusername: arrayUnion(name),
-        // LikedEmoji: arrayUnion(Id)
+        LikedEmoji: arrayUnion(Id)
       })
 
     }
@@ -230,11 +248,11 @@ export class InstaUserService {
         "likes": increment(-1)
       })
 
-      // this.afs.collection("LikedEmoji").doc(emojid).delete();
+      this.afs.collection("LikedEmoji").doc(emojiId).delete();
       return userRef.update({
         likedUserId: arrayRemove(userId),
         Likedusername: arrayRemove(name),
-        // LikedEmoji: arrayRemove(emojid)
+        LikedEmoji: arrayRemove(emojiId)
       }).then(() => {
         console.log("removed Sucessfylly")
       })
@@ -242,13 +260,13 @@ export class InstaUserService {
     }
 
   }
-  getPostDetails() {
-    return this.afs.collection('posts').valueChanges().pipe(take(1))
-  }
+  // getPostDetails() {
+  //   return this.afs.collection('posts').valueChanges().pipe(take(1))
+  // }
 
-  getDocumentFromCollection(documentId: string) {
-    return this.afs.collection('users').doc(documentId).get();
-  }
+  // getDocumentFromCollection(documentId: string) {
+  //   return this.afs.collection('users').doc(documentId).get();
+  // }
 
   blockPost(id: string, report: boolean) {
     if (report) {
@@ -275,19 +293,4 @@ export class InstaUserService {
       })
     })
   }
-
-  // addEmoji(postid , userId )
-  // {
-  //   const Id = uuidv4()
-  //   let LikedEmojiData: LikedEmoji =
-  //   {
-  //     EmojiId: Id,
-  //     postID: postid,
-  //     UserId: userID,
-  //     Emoji: [emoji]
-  //   }
-     // this.afs.collection("LikedEmoji").doc(Id).set(LikedEmojiData).then(() => {
-      //   console.log("done")
-      // })
-  // }
 }

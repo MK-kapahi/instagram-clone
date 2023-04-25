@@ -15,7 +15,7 @@ export class ShowPostComponent implements OnInit {
   LikedUserList: Array<string> = [];
   showUnlike!: boolean;
   selectedEmoji!: string;
-  isEmojiPickerVisible : boolean = false;
+  isEmojiPickerVisible: boolean = false;
   constructor(
     private userService: InstaUserService,
     private joinService: JoinCollectionService,
@@ -31,7 +31,8 @@ export class ShowPostComponent implements OnInit {
   ngOnInit(): void {
     this.joinService.AllPost();
     this.joinService.commentsWithPostsAndUsers.subscribe((response: any) => {
-      this.Posts = response;
+       this.Posts = response;
+       console.log(this.Posts)
     });
     this.initcommentSection()
 
@@ -58,28 +59,27 @@ export class ShowPostComponent implements OnInit {
       this.Comments = res;
     });
   }
-  LikePost(postId: any, like: boolean, post: any,) {
+  LikePost(postId: any, like: boolean, post: any, emojiId: string) {
     if (this.isSingleClick) {
       if (!like) {
         this.userService.getLikesData(postId).subscribe((response: any) => {
-          // this.selectedEmoji = event.emoji.native;
           console.log(response);
           if (response) {
 
-            this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.TRUE, this.currentUserDetails.displayName ).then(() => {
+            this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.TRUE, this.currentUserDetails.displayName, this.selectedEmoji, emojiId).then(() => {
               post?.Likes.push(this.currentUserDetails?.uid)
               post?.Names.push(this.currentUserDetails?.displayName);
             });
           } else {
             post?.Likes.push(this.currentUserDetails?.uid)
             post?.Names.push(this.currentUserDetails?.displayName)
-            this.userService.updateCountOfPost(postId, this.currentUserDetails.uid, this.currentUserDetails.displayName, )
+            this.userService.updateCountOfPost(postId, this.currentUserDetails.uid, this.currentUserDetails.displayName, this.selectedEmoji)
           }
         });
       } else {
         post?.Likes.splice(post.Likes?.indexOf(this.currentUserDetails?.uid), 1)
         post?.Names.splice(post.Names?.indexOf(this.currentUserDetails?.displayName), 1)
-        this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.FALSE, this.currentUserDetails.displayName ).then(() => {
+        this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.FALSE, this.currentUserDetails.displayName, this.selectedEmoji, emojiId).then(() => {
         });
       }
       this.isSingleClick = false;
@@ -97,9 +97,8 @@ export class ShowPostComponent implements OnInit {
   }
 
   addEmoji(event: any) {
+
     this.selectedEmoji = event.emoji.native;
-    //console.log(event.emoji.native
 
-
-    }
+  }
 }

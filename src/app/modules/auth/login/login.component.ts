@@ -21,12 +21,12 @@ export class LoginComponent {
       password: ['', Validators.compose([Validators.required, Validators.pattern(REGEX.PASSWORD)])]
     })
 
-    this.loginForm.controls["email"].valueChanges.subscribe(()=>{
-      this.isSingleClick =true;
+    this.loginForm.controls["email"].valueChanges.subscribe(() => {
+      this.isSingleClick = true;
     })
 
-    this.loginForm.controls["password"].valueChanges.subscribe(()=>{
-      this.isSingleClick =true;
+    this.loginForm.controls["password"].valueChanges.subscribe(() => {
+      this.isSingleClick = true;
     })
   }
 
@@ -35,16 +35,23 @@ export class LoginComponent {
   }
 
 
-  login() {
+   login() {
 
+    let UserDetails = {}
     if (this.isSingleClick) {
+      
+      this.fireService.AllUsers().subscribe((res: any) => {
+        console.log(res)
+      UserDetails = res.find((arr: any) => { return arr.email === this.loginForm.value['email'] })
+      console.log(UserDetails)
       if (this.loginForm.valid) {
-        this.fireService.SignIn(this.loginForm.value['email'], this.loginForm.value['password']).then((response: any) => {
-        })
+        
+        this.fireService.SignIn(this.loginForm.value['email'], this.loginForm.value['password'], UserDetails)
       }
       else {
         Object.keys(this.loginForm.controls).forEach(key => this.loginForm.controls[key].markAsTouched({ onlySelf: true }))
       }
+    })
       this.isSingleClick = false;
     }
 

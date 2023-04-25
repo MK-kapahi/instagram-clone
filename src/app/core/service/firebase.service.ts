@@ -6,6 +6,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getAuth } from 'firebase/auth';
 import { Main_Paths, Paths } from 'src/app/common/constant';
+import * as bcrypt from "bcryptjs";
+import { take } from 'rxjs';
 
 
 
@@ -19,11 +21,11 @@ const actionCodeSettings = {
 })
 export class FirebaseService {
 
-  userData : any ;
+  userData: any;
   authState = getAuth();
 
-  constructor(public auth: AngularFireAuth, private afs : AngularFirestore ,private instaUser : InstaUserService , private route : Router , private toaster : ToastrService ) { 
-    this.auth.authState.subscribe((user :any) => {
+  constructor(public auth: AngularFireAuth, private afs: AngularFirestore, private instaUser: InstaUserService, private route: Router, private toaster: ToastrService) {
+    this.auth.authState.subscribe((user: any) => {
       if (user) {
         this.userData = user;
         localStorage.setItem('user', JSON.stringify(this.userData));
@@ -35,67 +37,81 @@ export class FirebaseService {
     });
   }
 
-   SignIn(email: string, password: string) {
-    return this.auth
-      .signInWithEmailAndPassword(email, password)
-      .then(async (result:any) => {
-        console.log(result.user)
-        if(result.user.emailVerified)
-        {
-          localStorage.setItem('token',result.user._delegate.accessToken)
-          localStorage.setItem('id',result.user.uid)
-          this.route.navigate([`${Main_Paths.MAIN}/${Paths.MAIN.HOME}`]);
-          this.auth.authState.subscribe();
-          this.toaster.success('Logged In Successfull'," success",{
-            titleClass: "center",
-            messageClass: "center",
-           })
-        }
 
-        else
-        {
-           this.toaster.warning('Please Verify Your Email '," warning",{
-            titleClass: "center",
-            messageClass: "center",
-           })
-        }
-      })
-      .catch((error) => {
-        this.toaster.error(error.message,'Error', {
+   SignIn(email: string, password: string ,user:any) {
+    
+       if (bcrypt.compareSync(password , user.password)) {
+        return this.auth
+          .signInWithEmailAndPassword(email,user.password)
+          .then(async (result: any) => {
+            console.log(result.user)
+            if (result.user.emailVerified) {
+              localStorage.setItem('token', result.user._delegate.accessToken)
+              localStorage.setItem('id', result.user.uid)
+              this.route.navigate([`${Main_Paths.MAIN}/${Paths.MAIN.HOME}`]);
+              this.auth.authState.subscribe();
+              this.toaster.success('Logged In Successfull', " success", {
+                titleClass: "center",
+                messageClass: "center",
+              })
+            }
+
+            else {
+              this.toaster.warning('Please Verify Your Email ', " warning", {
+                titleClass: "center",
+                messageClass: "center",
+              })
+            }
+          })
+          .catch((error) => {
+            this.toaster.error(error.message, 'Error', {
+              titleClass: "center",
+              messageClass: "center",
+            });
+          });
+      }
+
+      else {
+        this.toaster.error("PLease Enter Valid Password", 'Error', {
           titleClass: "center",
-            messageClass: "center",
+          messageClass: "center",
         });
-      });
+        return
+      }
+    
   }
 
-  SignUp(email: string, password: string ,data:any) {
+  SignUp(email: string, data: any) {
+    const encryptHash = bcrypt.hashSync(data.password,10)
     return this.auth
-      .createUserWithEmailAndPassword(email, password)
+      .createUserWithEmailAndPassword(email, encryptHash)
       .then((userCredential) => {
-       const user = userCredential.user
-       console.log(user)
-       this.toaster.success('User Registered Successfully', 'Sucesss',
+        const user = userCredential.user
+        console.log("jdhswjdhswd", user)
+        this.instaUser.SetUserData(user, data ,encryptHash);
+        this.toaster.success('User Registered Successfully', 'Sucesss',
           {
             titleClass: "center",
             messageClass: "center"
           })
         this.SendVerificationMail();
         console.log(userCredential);
-       this.instaUser.SetUserData(user , data);
       })
       .catch((error) => {
         console.log(error)
-        this.toaster.error(error.message,'Error', {
+        this.toaster.error(error.message, 'Error', {
           titleClass: "center",
-            messageClass: "center",
+          messageClass: "center",
         });
       });
   }
 
   SendVerificationMail() {
-    return this.auth.currentUser 
-    .then((u: any) => 
-    u.sendEmailVerification(actionCodeSettings)).then(  () => {
+    return this.auth.currentUser
+      .then((u: any) => {
+        console.log(u)
+        u.sendEmailVerification(actionCodeSettings)
+      }).then(() => {
         this.route.navigate([`${Main_Paths.AUTH}/${Paths.AUTH.VERIFY_EMAIL}`]);
       });
   }
@@ -107,17 +123,17 @@ export class FirebaseService {
       .then((result) => {
         console.log(result);
         this.toaster.info('Password reset email sent, check your inbox.', 'Sucesss',
-              {
-                titleClass: "center",
-                messageClass: "center"
-              })
-          
+          {
+            titleClass: "center",
+            messageClass: "center"
+          })
+
         this.route.navigate([Main_Paths.AUTH]);
       })
       .catch((error) => {
-        this.toaster.error(error.message,'Error', {
+        this.toaster.error(error.message, 'Error', {
           titleClass: "center",
-            messageClass: "center",
+          messageClass: "center",
         });
       });
   }
@@ -128,10 +144,10 @@ export class FirebaseService {
   SignOut() {
     return this.auth.signOut().then(() => {
       this.toaster.success('Logout Successfully', 'Sucesss',
-          {
-            titleClass: "center",
-            messageClass: "center"
-          })
+        {
+          titleClass: "center",
+          messageClass: "center"
+        })
       localStorage.removeItem('user');
       localStorage.removeItem('id');
       localStorage.removeItem('token');
@@ -140,5 +156,9 @@ export class FirebaseService {
   }
 
 
+  AllUsers()
+  {
+    return this.afs.collection("users").valueChanges().pipe(take(1))
+  }
 }
 

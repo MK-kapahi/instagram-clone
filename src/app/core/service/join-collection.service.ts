@@ -41,16 +41,16 @@ export class JoinCollectionService {
           const post = posts.find(p => p.postId === postDetail.postId);
           const user = users.find(u => u.uid === post?.uid);
           const Like = likes.find(l => l.postId === post?.postId)
-          // const Emoji = emoji.find (e => e.postID = post?.postId)
+          const Emoji = emoji.find (e => e.PostId = post?.postId)
           return {
             ...postDetail,
             photoUrl: user ? user.photoURL : '',
             userName: user ? user.displayName : '',
             Likes: Like ? Like.likedUserId : [],
             Names: Like ? Like.Likedusername : [],
-            // LikedEmoji : Like ? Like.LikedEmoji :[],
-            // Emoji : Emoji ? Emoji.Emoji :[],
-            // EmojiId : Emoji ? Emoji.EmojiId : '',
+            LikedEmoji : Like ? Like.LikedEmoji :[],
+            Emoji : Emoji ? Emoji.Emoji :[],
+            EmojiId : Emoji ? Emoji.EmojiId : '',
             uid: user ? user.uid : ""
           };
         });

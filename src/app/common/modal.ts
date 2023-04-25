@@ -4,6 +4,7 @@ export interface User {
    displayName: string;
    photoURL?: string;
    Bio?: string
+   password : string
 }
 
 export interface Post {
@@ -32,16 +33,18 @@ export interface Comment {
    postId?: any;
    replies?: Array<any>;
    parentId?: string;
+
 }
 
 export interface LikesModal {
    postId: any;
    likedUserId: Array<any>
    Likedusername: Array<string>
-   // LikedEmoji: Array<string>
+   LikedEmoji: Array<string>
 }
 
 export interface LikedEmoji {
-   Emoji: Array<string>;
-   postId : string
+   Emoji:string;
+   EmojiId : string
+   PostId : string
 }

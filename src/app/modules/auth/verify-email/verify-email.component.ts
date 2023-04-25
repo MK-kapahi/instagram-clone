@@ -14,9 +14,4 @@ export class VerifyEmailComponent {
   {
     this.route.navigate([`${Main_Paths.AUTH}`])
   }
-
-  sendVerificationEmail()
-  {
-    this.authService.SendVerificationMail()
-  }
 }
