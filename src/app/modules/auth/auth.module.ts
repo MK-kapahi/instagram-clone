@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Paths } from 'src/app/common/constant';
 import { RouterModule, Routes } from '@angular/router';
 
+
 const route : Routes = [
   {
     path:"",redirectTo:Paths.AUTH.LOGIN ,pathMatch:'full'
