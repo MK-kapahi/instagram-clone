@@ -13,7 +13,7 @@ export class CreatePostComponent {
   FileUpload!: any
   discriptionMessage : string = '';
   User : any =[] 
-  URL : any ;
+  URL : string ="" ;
   Posts : any =[]
   Type : number = DEFAULT.IMAGE ;
   isEmojiPickerVisible: boolean = false;
@@ -39,7 +39,6 @@ export class CreatePostComponent {
     {
 
       this.FileUpload = event.target.files[0];
-      console.log(this.FileUpload)
       if(this.FileUpload.type==='video/mp4')
       {
         this.userService.uploadVideo(this.FileUpload).subscribe();
@@ -66,6 +65,7 @@ export class CreatePostComponent {
       }
     }   
 
+    // getting the progress as Observable 
     getProgress(): Observable<number> {
       return this.uploadPercent ? this.uploadPercent.pipe(
         map(progress => {

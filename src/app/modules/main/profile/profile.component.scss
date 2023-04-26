@@ -179,8 +179,8 @@
     grid-gap: 1px;
     &__photo {
       display: flex;
-      width: 100%;
-      height: calc(#{$device-width} / #{$grid-col-amount});
+      // width: 100%;
+      // height: calc(#{$device-width} / #{$grid-col-amount});
       background: center / cover no-repeat;    
     }
   }
@@ -238,4 +238,17 @@
   {
     width: 600px;
     height: 600px;
+  }
+
+  .post-details
+  {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 700px ;
+  }
+
+  .details
+  {
+    justify-content: flex-end;
   }

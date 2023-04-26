@@ -48,9 +48,6 @@ export class JoinCollectionService {
             userName: user ? user.displayName : '',
             Likes: Like ? Like.likedUserId : [],
             Names: Like ? Like.Likedusername : [],
-            // LikedEmoji : Like ? Like.LikedEmoji :[],
-            // Emoji : Emoji ? Emoji.Emoji :[],
-            // EmojiId : Emoji ? Emoji.EmojiId : '',
             uid: user ? user.uid : ""
           };
         });
@@ -62,7 +59,6 @@ export class JoinCollectionService {
   // getting post of particular user 
   UserPost() {
     let uid: any = localStorage.getItem('id')
-    console.log(uid)
     this.postsCollection = this.afs.collection<PostModal>('posts', ref => ref.where('uid', '==', uid));
     this.postDetailCollection = this.afs.collection<Post>('postDetail', ref => ref.orderBy('createdAt', 'desc'));
     this.usersCollection = this.afs.collection<User>(`users`);

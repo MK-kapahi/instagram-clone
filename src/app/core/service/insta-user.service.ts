@@ -173,14 +173,6 @@ export class InstaUserService {
 
   updateData(postid: any, userId: string, like: boolean, name: string, emoji: string, emojiId: string) {
 
-    const Id = uuidv4()
-    let LikedEmojiData: LikedEmoji =
-    {
-      EmojiId: Id,
-      Emoji: emoji,
-      PostId: postid
-    }
-
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `Likes/${postid}`
     );
@@ -204,10 +196,7 @@ export class InstaUserService {
       return userRef.update({
         likedUserId: arrayRemove(userId),
         Likedusername: arrayRemove(name),
-      }).then(() => {
-        console.log("removed Sucessfylly")
       })
-
     }
 
   }

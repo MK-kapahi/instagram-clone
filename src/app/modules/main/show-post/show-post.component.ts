@@ -54,7 +54,6 @@ export class ShowPostComponent implements OnInit {
     );
 
     this.commentsService.getComments().subscribe((res: any) => {
-      console.log("comments", res)
       this.Comments = res;
     });
   }
@@ -62,7 +61,6 @@ export class ShowPostComponent implements OnInit {
     if (this.isSingleClick) {
       if (!like) {
         this.userService.getLikesData(postId).subscribe((response: any) => {
-          console.log(response);
           if (response) {
 
             this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.TRUE, this.currentUserDetails.displayName, this.selectedEmoji, emojiId).then(() => {
@@ -90,9 +88,7 @@ export class ShowPostComponent implements OnInit {
 
   }
   ReportPost(id: string) {
-    this.userService.blockPost(id, DEFAULT.TRUE).then(() => {
-      console.log('done');
-    });
+    this.userService.blockPost(id, DEFAULT.TRUE)
   }
 
   addEmoji(event: any) {

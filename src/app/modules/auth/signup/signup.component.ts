@@ -47,11 +47,6 @@ export class SignupComponent {
 
       this.isSingleClick=false;
     }
-
-
-    // setTimeout(()=>{
-    //   this.isSingleClick=true;
-    // },2000)
   }
 
   login() {

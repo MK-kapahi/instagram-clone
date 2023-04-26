@@ -27,12 +27,17 @@
   <section class="tabs">
   </section>
   <section class="grid d-flex flex-wrap justify-content-around">
-    <div *ngFor="let post of CurrentUserPost">
-      <div class="grid__photo ">
+    <div *ngFor="let post of CurrentUserPost" class="post-details">
+      <div class="grid__photo">
         <img [src]="post.Url" class="photo" alt="" *ngIf="post.Type === 1" />
         <video controls autoplay *ngIf="post.Type === 2" class="vedio" muted>
           <source [src]="post.Url" type="video/mp4" />
         </video>
+      </div>
+      <div class="details">
+        <p>Likes :  {{post.likes}}</p>
+        <p>Comments :  {{post.Comments}}</p>
+        <p>Likes :  {{post.Description}}</p>
       </div>
     </div>
   </section>

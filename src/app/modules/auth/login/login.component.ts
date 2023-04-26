@@ -41,9 +41,7 @@ export class LoginComponent {
     if (this.isSingleClick) {
       
       this.fireService.AllUsers().subscribe((res: any) => {
-        console.log(res)
       UserDetails = res.find((arr: any) => { return arr.email === this.loginForm.value['email'] })
-      console.log(UserDetails)
       if (this.loginForm.valid) {
         
         this.fireService.SignIn(this.loginForm.value['email'], this.loginForm.value['password'], UserDetails)

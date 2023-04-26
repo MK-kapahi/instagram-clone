@@ -10,21 +10,16 @@ import { InstaUserService } from 'src/app/core/service/insta-user.service';
 })
 export class HomeComponent {
 
-  loading :boolean = true ;
+  loading: boolean = true;
   public currentUserDetail = new Subject;
-  constructor(private spinnerService: NgxSpinnerService , private userService : InstaUserService) {
+  constructor(private spinnerService: NgxSpinnerService,) {
   }
   ngOnInit(): void {
 
-    // this.userService.getDetails().subscribe((response) => {
-    //   this.currentUserDetail.next(response);
-    // });
-    // Start spinner 
     this.spinnerService.show();
 
 
     setTimeout(() => {
-      // Hide the spinner and show the content
       this.spinnerService.hide();
       this.loading = false;
     }, 3000);

@@ -23,14 +23,12 @@ export class ProfileComponent implements OnInit {
     this.userService.getDetails().subscribe((response) => {
       this.uid = response.uid
       this.User.push(response);
-      console.log(this.User)
     });
   }
   ngOnInit(): void {
     // Getting the post of a particular User 
     this.join.UserPost()
     this.join.currentUserPost.subscribe((response) => {
-      console.log("Current User POst",response);
       this.CurrentUserPost = response;
       this.CurrentUserPost = this.CurrentUserPost.reverse()
     })
@@ -40,7 +38,6 @@ export class ProfileComponent implements OnInit {
   uploadProfileImage(event :any)
   {
     let file = event.target.files[0];
-    console.log(file);
     this.userService.uploadImage(file).subscribe((res:any)=>{
   })
   this.userService.Url.subscribe((response)=>{
@@ -75,7 +72,6 @@ export class ProfileComponent implements OnInit {
 
   // For adding emoji to the dicription message 
   addEmoji(event: any) {
-    console.log(`${event.emoji.native}`)
     const text = `${this.Bio}${event.emoji.native}`;
 
     this.Bio = text;

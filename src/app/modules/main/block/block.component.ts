@@ -22,7 +22,6 @@ export class BlockComponent {
   ) {
     this.userService.getDetails().subscribe((response) => {
       this.currentUserDetails = response;
-      console.log(response)
     });
   }
   messageTobeCommented: string = '';
@@ -32,7 +31,6 @@ export class BlockComponent {
     this.joinService.AllPost();
     this.joinService.commentsWithPostsAndUsers.subscribe((response: any) => {
       this.Posts = response;
-      console.log(this.Posts)
     });
 
     this.joinService.allComments();
@@ -41,75 +39,18 @@ export class BlockComponent {
     });
   }
 
-  showLike(id: any) {
-    let data = []
-    for (let post of this.Posts) {
-      if (post.postId === id) {
-        data = post.Likes.find((user: any) => {
-          return user === this.currentUserDetails.uid
-        })
-      }
-    }
-    if (data) {
-      return true;
-    }
-    else {
-
-      return false;
-    }
-  }
-  // onSubmit($event: any, id: any) {
-  //   console.log($event);
-  //   this.messageTobeCommented = $event;
-  //   this.commentsService.addComment(
-  //     this.messageTobeCommented,
-  //     id,
-  //     this.currentUserDetails.displayName
-  //   );
-
-  //   console.log('Done');
-  // }
-  // LikePost(postId: any, like: boolean) {
-  //   console.log(like)
-  //   if (!like) {
-  //     this.userService.getLikesData(postId).subscribe((response: any) => {
-  //       console.log(response);
-  //       if (response) {
-
-  //         this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.TRUE, this.currentUserDetails.displayName).then(() => {
-  //           window.location.reload();
-  //         });
-  //       } else {
-  //         this.userService.updateCountOfPost(postId, this.currentUserDetails.uid, this.currentUserDetails.displayName).then(() => {
-  //           window.location.reload();
-  //         });
-  //       }
-  //     });
-  //   } else {
-  //     this.userService.updateData(postId, this.currentUserDetails.uid, DEFAULT.FALSE, this.currentUserDetails.displayName).then(() => {
-
-  //       window.location.reload();
-  //     });
+  
+  // showCommentofPost(Id: any) {
+  //   if (this.showComment) {
+  //     this.showComment = false;
   //   }
+
+  //   else {
+  //     this.showComment = true;
+  //   }
+
+  //   this.Comments = this.Comments.filter((commentArray: any) => { return (commentArray.postId === Id && commentArray.parentId === '') })
   // }
-  ReportPost(id: string) {
-    this.userService.blockPost(id, DEFAULT.TRUE).then(() => {
-      console.log('done');
-    });
-  }
-
-  showCommentofPost(Id: any) {
-    if (this.showComment) {
-      this.showComment = false;
-    }
-
-    else {
-      this.showComment = true;
-    }
-
-    this.Comments = this.Comments.filter((commentArray: any) => { return (commentArray.postId === Id && commentArray.parentId === '') })
-    console.log(this.Comments)
-  }
 
   unReportPost(id : any)
   {

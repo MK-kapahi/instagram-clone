@@ -39,10 +39,10 @@ export class FirebaseService {
 
 
    SignIn(email: string, password: string ,user:any) {
-    
-       if (bcrypt.compareSync(password , user.password)) {
+  
+       if (bcrypt.compareSync(password , user?.password)) {
         return this.auth
-          .signInWithEmailAndPassword(email,user.password)
+          .signInWithEmailAndPassword(email,user?.password)
           .then( (result: any) => {
             console.log(result.user)
             if (result.user.emailVerified) {

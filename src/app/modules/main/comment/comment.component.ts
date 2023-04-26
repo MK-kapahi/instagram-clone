@@ -10,7 +10,6 @@ import { JoinCollectionService } from 'src/app/core/service/join-collection.serv
 })
 export class CommentComponent {
   replyText: any;
-  hideReply: boolean = false
   @Input() comment: any;
   Postid: any;
   isEditing = false;
@@ -40,7 +39,6 @@ export class CommentComponent {
   }
   showReply(id: any) {
 
-    this.hideReply = true;
     if (this.repliesShow) {
       this.repliesShow = false;
     }
@@ -64,6 +62,7 @@ export class CommentComponent {
   addEmoji(event: any) {
 
     const text = `${this.replyText}${event.emoji.native}`;
+    this.replyText=text;
     console.log(this.replyText);
   }
 
@@ -71,14 +70,4 @@ export class CommentComponent {
     this.isEmojiPickerVisible = false;
   }
 
-  Hide() {
-    this.hideReply = false
-    if (this.repliesShow) {
-      this.repliesShow = false;
-    }
-
-    else {
-      this.repliesShow = true;
-    }
-  }
 }

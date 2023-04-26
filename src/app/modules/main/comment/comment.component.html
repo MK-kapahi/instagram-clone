@@ -19,10 +19,10 @@
 					<form (ngSubmit)="addReply()" class="d-flex ">
 						<textarea [(ngModel)]="replyText" name="comment" placeholder="Write a reply..."
 							class="textarea-comment" (focus)="onFocus()"></textarea>
-						<button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;" class="btn">😀</button>
+							<button type="submit" *ngIf="replyText" class="btn btn-primary">Add</button>
+						<button type="button" (click)="isEmojiPickerVisible = !isEmojiPickerVisible;" class="btn">😀</button>
 						<emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)"
 							title="Choose your emoji"></emoji-mart>
-						<button type="submit" *ngIf="replyText" class="btn btn-primary">Add</button>
 					</form>
 				</div>
 			</div>
