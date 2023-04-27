@@ -38,56 +38,54 @@ export class FirebaseService {
   }
 
 
-   SignIn(email: string, password: string ,user:any) {
-  
-       if (bcrypt.compareSync(password , user?.password)) {
-        return this.auth
-          .signInWithEmailAndPassword(email,user?.password)
-          .then( (result: any) => {
-            console.log(result.user)
-            if (result.user.emailVerified) {
-              localStorage.setItem('token', result.user._delegate.accessToken)
-              localStorage.setItem('id', result.user.uid)
-              this.route.navigate([`${Main_Paths.MAIN}/${Paths.MAIN.HOME}`]);
-              this.auth.authState.subscribe();
-              this.toaster.success('Logged In Successfull', " success", {
-                titleClass: "center",
-                messageClass: "center",
-              })
-            }
-
-            else {
-              this.toaster.warning('Please Verify Your Email ', " warning", {
-                titleClass: "center",
-                messageClass: "center",
-              })
-            }
-          })
-          .catch((error) => {
-            this.toaster.error(error.message, 'Error', {
+  SignIn(email: string, password: string, user: any) {
+    if (bcrypt.compareSync(password, user?.password)) {
+      return this.auth
+        .signInWithEmailAndPassword(email, user?.password)
+        .then((result: any) => {
+          if (result.user.emailVerified) {
+            localStorage.setItem('token', result.user._delegate.accessToken)
+            localStorage.setItem('id', result.user.uid)
+            this.route.navigate([`${Main_Paths.MAIN}/${Paths.MAIN.HOME}`]);
+            this.auth.authState.subscribe();
+            this.toaster.success('Logged In Successfull', " success", {
               titleClass: "center",
               messageClass: "center",
-            });
-          });
-      }
+            })
+          }
 
-      else {
-        this.toaster.error("PLease Enter Valid Password", 'Error', {
-          titleClass: "center",
-          messageClass: "center",
+          else {
+            this.toaster.warning('Please Verify Your Email ', " warning", {
+              titleClass: "center",
+              messageClass: "center",
+            })
+          }
+        })
+        .catch((error) => {
+          this.toaster.error(error.message, 'Error', {
+            titleClass: "center",
+            messageClass: "center",
+          });
         });
-        return
-      }
-    
+    }
+
+    else {
+      this.toaster.error("PLease Enter Valid Password", 'Error', {
+        titleClass: "center",
+        messageClass: "center",
+      });
+      return
+    }
+
   }
 
   SignUp(email: string, data: any) {
-    const encryptHash = bcrypt.hashSync(data.password,DEFAULT.HASH_VALUE)
+    const encryptHash = bcrypt.hashSync(data.password, DEFAULT.HASH_VALUE)
     return this.auth
       .createUserWithEmailAndPassword(email, encryptHash)
       .then((userCredential) => {
         const user = userCredential.user
-        this.instaUser.SetUserData(user, data ,encryptHash);
+        this.instaUser.SetUserData(user, data, encryptHash);
         this.toaster.success('User Registered Successfully', 'Sucesss',
           {
             titleClass: "center",
@@ -149,8 +147,7 @@ export class FirebaseService {
   }
 
 
-  AllUsers()
-  {
+  AllUsers() {
     return this.afs.collection("users").valueChanges().pipe(take(1))
   }
 }

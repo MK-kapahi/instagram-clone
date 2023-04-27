@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Main_Paths, Paths, REGEX } from 'src/app/common/constant';
 import { FirebaseService } from 'src/app/core/service/firebase.service';
 
@@ -14,7 +15,7 @@ export class LoginComponent {
   isSingleClick: Boolean = true;
   loginForm: FormGroup;
   showPassword: boolean = true;
-  constructor(private fb: FormBuilder, private route: Router, private fireService: FirebaseService) {
+  constructor(private fb: FormBuilder, private route: Router, private fireService: FirebaseService, private toaster: ToastrService) {
 
     this.loginForm = this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.pattern(REGEX.EMAIL)])],
@@ -35,21 +36,31 @@ export class LoginComponent {
   }
 
 
-   login() {
+  login() {
 
     let UserDetails = {}
     if (this.isSingleClick) {
-      
-      this.fireService.AllUsers().subscribe((res: any) => {
-      UserDetails = res.find((arr: any) => { return arr.email === this.loginForm.value['email'] })
+
       if (this.loginForm.valid) {
-        
-        this.fireService.SignIn(this.loginForm.value['email'], this.loginForm.value['password'], UserDetails)
+        this.fireService.AllUsers().subscribe((res: any) => {
+
+          UserDetails = res.find((arr: any) => { return arr.email === this.loginForm.value['email'] })
+          if (UserDetails) {
+
+            this.fireService.SignIn(this.loginForm.value['email'], this.loginForm.value['password'], UserDetails)
+          }
+          else {
+            this.toaster.error("User Not Found ", 'Error', {
+              titleClass: "center",
+              messageClass: "center",
+            });
+          }
+        })
       }
+
       else {
         Object.keys(this.loginForm.controls).forEach(key => this.loginForm.controls[key].markAsTouched({ onlySelf: true }))
       }
-    })
       this.isSingleClick = false;
     }
 
